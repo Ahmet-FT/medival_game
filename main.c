@@ -126,7 +126,6 @@ typedef struct {
 int extract_number(const char* json, const char* key) {
     char* found = strstr(json, key);
     if (found) {
-        // Anahtarın bulunduğu yeri atlayıp değeri oku
         found = strchr(found, ':') + 1;
         return atoi(found);
     }
@@ -145,14 +144,12 @@ int extract_number2(char path_to_file[], char key[], char key2[]) {
     char data[5000];
     int i = 0;
 
-    // Dosyadan okuma işlemi sırasında dizi sınırlarını kontrol edin.
     while (i < sizeof(buffer2) - 1 && fscanf(fp, "%c", &buffer2[i]) != EOF) {
         data[i] = buffer2[i];
         i++;
     }
 
-    // Dosyadan okuma tamamlandığında diziyi sonlandırın.
-    data[i] = '\0';  // EOF yerine '\0' kullanılır.
+    data[i] = '\0';
 
     fclose(fp);
     char* found = strstr(data, key);
@@ -162,11 +159,9 @@ int extract_number2(char path_to_file[], char key[], char key2[]) {
     if (found2) {
         int i = 0;
         int j = 0;
-        // Anahtarın bulunduğu yeri atlayıp değeri oku
         for (; found2[i-2] != ':'; i++)
             continue;
 
-        // '[''ten ']'e kadar karakterleri output dizisine kopyalayın.
         for (; found2[i] != '\n'; i++) {
             if(found2[i] != ',') {
                 output[j] = found2[i];
@@ -179,7 +174,6 @@ int extract_number2(char path_to_file[], char key[], char key2[]) {
     }
 }
 
-// JSON stringinden karakter dizisini ayrıştırma
 int extract_string(char race[], char search[], char path[]) {
     char buffer[5000];
     char data[5000];
@@ -191,39 +185,30 @@ int extract_string(char race[], char search[], char path[]) {
         perror("Files/file.json bulunamadı dosyanın doğru isimde ve doğru dizinde olduğundan emin olun. ");
         return 1;
     }
-    // Dosyadan okuma işlemi sırasında dizi sınırlarını kontrol edin.
     while (i < sizeof(buffer) - 1 && fscanf(fp, "%c", &buffer[i]) != EOF) {
         data[i] = buffer[i];
         i++;
     }
 
-    // Dosyadan okuma tamamlandığında diziyi sonlandırın.
-    data[i] = '\0';  // EOF yerine '\0' kullanılır.
-
+    data[i] = '\0'; 
     fclose(fp);
-  // Dosyayı kapatın.
 
     char output[5000];
 
-    // "ork_legi" araması yapılırken sonucu kontrol edin.
+
     char *result = strstr(data, race);
     if (result == NULL) {
-       // printf("Aranan dize bulunamadı.\n");
-        //printf("%s", data);
         return 1;
     }
 
-    // "kahramanlar" kelimesini arayın ve sonucunu kontrol edin.
     char *start = strstr(result, search);
     if (start != NULL) {
         int j = 0;
         i = 0;
 
-        // '[' karakterine kadar atlayın.
         for (; start[i-2] != '['; i++)
             continue;
 
-        // '[''ten ']'e kadar karakterleri output dizisine kopyalayın.
         for (; start[i+1] != ']'; i++) {
             if (start[i] != ']') {
                 output[j] = start[i];
@@ -231,11 +216,8 @@ int extract_string(char race[], char search[], char path[]) {
             }
         }
 
-        // Sonlandırıcı karakterleri ekleyin.
-        output[j] = '\0';  // EOF yerine '\0' kullanılır.
+        output[j] = '\0';  
 
-        // Sonuçları ekrana yazdırın.
-        //printf("%s", output);
     } 
     strcpy(path, output);
 
@@ -256,37 +238,30 @@ int extract_effect(char path_to_file[], char Hero_Creature[], char search[], cha
     char data[5000];
     int i = 0;
 
-    // Dosyadan okuma işlemi sırasında dizi sınırlarını kontrol edin.
     while (i < sizeof(buffer2) - 1 && fscanf(fp, "%c", &buffer2[i]) != EOF) {
         data[i] = buffer2[i];
         i++;
     }
 
-    // Dosyadan okuma tamamlandığında diziyi sonlandırın.
-    data[i] = '\0';  // EOF yerine '\0' kullanılır.
+    data[i] = '\0';  
 
-    fclose(fp);  // Dosyayı kapatın.
+    fclose(fp);  
 
     char output[5000];
 
-    // "ork_legi" araması yapılırken sonucu kontrol edin.
     char *result = strstr(data, Hero_Creature);
     if (result == NULL) {
-        //printf("Aranan dize bulunamadı.\n");
         return 1;
     }
 
-    // "kahramanlar" kelimesini arayın ve sonucunu kontrol edin.
     char *start = strstr(result, search);
     if (start != NULL) {
         int j = 0;
         i = 0;
 
-        // '[' karakterine kadar atlayın.
         for (; start[i-3] != ':'; i++)
             continue;
 
-        // '[''ten ']'e kadar karakterleri output dizisine kopyalayın.
         for (; start[i] != '\"'; i++) {
             if (start[i] != '\"') {
                 output[j] = start[i];
@@ -294,11 +269,7 @@ int extract_effect(char path_to_file[], char Hero_Creature[], char search[], cha
             }
         }
 
-        // Sonlandırıcı karakterleri ekleyin.
-        output[j] = '\0';  // EOF yerine '\0' kullanılır.
-
-        // Sonuçları ekrana yazdırın.
-        //printf("%s", output);
+        output[j] = '\0';  
     }
 
     strcpy(path, output);
@@ -317,23 +288,19 @@ int extract_effect2(char path_to_file[], char Hero_Creature[], int level, char p
     char data[5000];
     int i = 0;
 
-    // Dosyadan okuma işlemi sırasında dizi sınırlarını kontrol edin.
     while (i < sizeof(buffer2) - 1 && fscanf(fp, "%c", &buffer2[i]) != EOF) {
         data[i] = buffer2[i];
         i++;
     }
 
-    // Dosyadan okuma tamamlandığında diziyi sonlandırın.
-    data[i] = '\0';  // EOF yerine '\0' kullanılır.
+    data[i] = '\0';
 
-    fclose(fp);  // Dosyayı kapatın.
+    fclose(fp);  
 
     char output[5000];
 
-    // "ork_legi" araması yapılırken sonucu kontrol edin.
     char *result = strstr(data, Hero_Creature);
     if (result == NULL) {
-        //printf("Aranan dize bulunamadı.\n");
         return 1;
     }
 
@@ -347,18 +314,15 @@ int extract_effect2(char path_to_file[], char Hero_Creature[], int level, char p
         search = "seviye_3";
     }
     char *start2 = strstr(result, search);
-    // "kahramanlar" kelimesini arayın ve sonucunu kontrol edin.
     char *start = strstr(start2, "aciklama");
 
     if (start != NULL) {
         int j = 0;
         i = 0;
 
-        // '[' karakterine kadar atlayın.
         for (; start[i-3] != ':'; i++)
             continue;
 
-        // '[''ten ']'e kadar karakterleri output dizisine kopyalayın.
         for (; start[i] != '\"'; i++) {
             if (start[i] != '\"') {
                 output[j] = start[i];
@@ -366,11 +330,8 @@ int extract_effect2(char path_to_file[], char Hero_Creature[], int level, char p
             }
         }
 
-        // Sonlandırıcı karakterleri ekleyin.
-        output[j] = '\0';  // EOF yerine '\0' kullanılır.
+        output[j] = '\0';  
 
-        // Sonuçları ekrana yazdırın.
-        //printf("%s", output);
     } 
     strcpy(path, output);
 
@@ -380,7 +341,6 @@ int extract_effect2(char path_to_file[], char Hero_Creature[], int level, char p
 int extract_explaination(char path_to_file[], char Hero_Creature[], char path[]){
 
 
-    // Dosyayı açmayı deneyin ve başarısız olursa bir hata mesajı verin.
     FILE *fp = fopen(path_to_file, "r");
     if (fp == NULL) {
         printf("%s bulunamadı dosyanın doğru isimde ve doğru dizinde olduğundan emin olun. ", path_to_file);
@@ -392,28 +352,23 @@ int extract_explaination(char path_to_file[], char Hero_Creature[], char path[])
     int i = 0;
     KahramanlarVeCanavarlar oyuncular = { 0 };
 
-    // Dosyadan okuma işlemi sırasında dizi sınırlarını kontrol edin.
     while (i < sizeof(buffer) - 1 && fscanf(fp, "%c", &buffer[i]) != EOF) {
         data[i] = buffer[i];
         i++;
     }
 
-    // Dosyadan okuma tamamlandığında diziyi sonlandırın.
-    data[i] = '\0';  // EOF yerine '\0' kullanılır.
-
-    fclose(fp);  // Dosyayı kapatın.
+    data[i] = '\0';  
+    fclose(fp);  
 
     char pos[5000];
 
-    // "ork_legi" araması yapılırken sonucu kontrol edin.
+    
     char *result = strstr(data, Hero_Creature);
     if (result == NULL) {
-        //printf("Aranan dize bulunamadı.\n");
         return 1;
     }
 
-    // "kahramanlar" kelimesini arayın ve sonucunu kontrol edin.
-    char *start = strstr(result, "aciklama");
+       char *start = strstr(result, "aciklama");
     if (start != NULL) {
         int j = 0;
         i = 0;
@@ -467,7 +422,7 @@ int extract_explaination(char path_to_file[], char Hero_Creature[], char path[])
     strcpy(path, "tum_birimler");
 }
     else {
-    return 1;  // Hiçbir koşul sağlanmazsa buradan çık
+    return 1;
 }
     }
     return 0;
@@ -485,37 +440,35 @@ int extract_value(char path_to_file[], char Hero_Creature[], char search[]) {
     char data[5000];
     int i = 0;
 
-    // Dosyadan okuma işlemi sırasında dizi sınırlarını kontrol edin.
     while (i < sizeof(buffer2) - 1 && fscanf(fp, "%c", &buffer2[i]) != EOF) {
         data[i] = buffer2[i];
         i++;
     }
 
-    // Dosyadan okuma tamamlandığında diziyi sonlandırın.
-    data[i] = '\0';  // EOF yerine '\0' kullanılır.
 
-    fclose(fp);  // Dosyayı kapatın.
+    data[i] = '\0';  
+
+    fclose(fp);
 
     char output[5000];
 
-    // "ork_legi" araması yapılırken sonucu kontrol edin.
+     "ork_legi";
     char *result = strstr(data, Hero_Creature);
     if (result == NULL) {
-        //printf("Aranan dize bulunamadı.\n");
+        printf("Aranan dize bulunamadı.\n");
         return 1;
     }
 
-    // "kahramanlar" kelimesini arayın ve sonucunu kontrol edin.
+     "kahramanlar";
     char *start = strstr(result, search);
     if (start != NULL) {
         int j = 0;
         i = 0;
 
-        // '[' karakterine kadar atlayın.
+         '[';
         for (; start[i-3] != ':'; i++)
             continue;
 
-        // '[''ten ']'e kadar karakterleri output dizisine kopyalayın.
         for (; start[i] != '\"'; i++) {
             if (start[i] != '\"') {
                 output[j] = start[i];
@@ -523,11 +476,6 @@ int extract_value(char path_to_file[], char Hero_Creature[], char search[]) {
             }
         }
 
-        // Sonlandırıcı karakterleri ekleyin.
-        //output[j] = '\;  // EOF yerine '\0' kullanılır.
-
-        // Sonuçları ekrana yazdırın.
-        //printf("%s", output);
     } 
 
     return atoi(output);
@@ -541,7 +489,6 @@ int extract_reseach(char race[], char search[], char path[], int path2) {
     int i = 0;
     
     FILE *fp = fopen("Files/file.json", "r");
-    // Dosyadan okuma işlemi sırasında dizi sınırlarını kontrol edin.
     while (i < sizeof(buffer) - 1 && fscanf(fp, "%c", &buffer[i]) != EOF) {
         data[i] = buffer[i];
         i++;
@@ -552,44 +499,35 @@ int extract_reseach(char race[], char search[], char path[], int path2) {
         return 1;
     }
 
-    // Dosyadan okuma tamamlandığında diziyi sonlandırın.
-    data[i] = '\0';  // EOF yerine '\0' kullanılır.
+    data[i] = '\0';  
 
     fclose(fp);
-  // Dosyayı kapatın.
 
     char output[5000];
 
-    // "ork_legi" araması yapılırken sonucu kontrol edin.
     char *result = strstr(data, race);
     if (result == NULL) {
-        //printf("Aranan dize bulunamadı.\n");
-        //printf("%s", data);
         return 1;
     }
 
-    // "kahramanlar" kelimesini arayın ve sonucunu kontrol edin.
     char *start = strstr(result, search);
     if (start != NULL) {
         int j = 0;
         i = 0;
 
-        // '[' karakterine kadar atlayın.
         for (; start[i-2] != '{'; i++)
             continue;
         for (; start[i-1] != '\"'; i++)
             continue;
 
 
-        // '[''ten ']'e kadar karakterleri output dizisine kopyalayın.
         for (; start[i] != '\"'; i++) {
 
                 output[j] = start[i];
                 j++;
 
 
-        // Sonlandırıcı karakterleri ekleyin.
-        output[j] = '\0';  // EOF yerine '\0' kullanılır.
+        output[j] = '\0';  
     } 
     }
     strcpy(path, output);
@@ -606,7 +544,6 @@ int extract_reseach_value(char race[], int level) {
     int i = 0;
     
     FILE *fp = fopen("Files/research.json", "r");
-    // Dosyadan okuma işlemi sırasında dizi sınırlarını kontrol edin.
     while (i < sizeof(buffer) - 1 && fscanf(fp, "%c", &buffer[i]) != EOF) {
         data[i] = buffer[i];
         i++;
@@ -616,19 +553,14 @@ int extract_reseach_value(char race[], int level) {
         return 1;
     }
 
-    // Dosyadan okuma tamamlandığında diziyi sonlandırın.
-    data[i] = '\0';  // EOF yerine '\0' kullanılır.
+    data[i] = '\0';  
 
     fclose(fp);
-  // Dosyayı kapatın.
 
     char output[5000];
 
-    // "ork_legi" araması yapılırken sonucu kontrol edin.
     char *result = strstr(data, race);
     if (result == NULL) {
-        //printf("Aranan dize bulunamadı.\n");
-        //printf("%s", data);
         return 1;
     }
 
@@ -717,14 +649,7 @@ void json_parse(const char* json, Oyuncular* oyuncular) {
     extract_string("ork_legi", "kahramanlar", oyuncular->ork_legi.kahramanlar_ve_canavarlar.kahramanlar);
     extract_string("ork_legi", "canavarlar", oyuncular->ork_legi.kahramanlar_ve_canavarlar.canavarlar);
 
-    //extract_effect(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.canavarlar, "etki_turu", oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_turu);
-    //extract_effect(oyuncular.ork_legi.kahramanlar_ve_canavarlar.canavarlar, "etki_turu", oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.etki_turu);
 
-
-        // Dosyayı açmayı deneyin ve başarısız olursa bir hata mesajı verin.
-
-
-    //printf(" %s\n", path);
 
 
     //kahraman ve canavarların etki türlerini ayrıştır
@@ -760,8 +685,6 @@ void json_parse(const char* json, Oyuncular* oyuncular) {
     extract_explaination("Files/research.json", oyuncular->ork_legi.arastirma_seviyesi.baslik, oyuncular->ork_legi.arastirma_seviyesi.hedef);
     extract_explaination("Files/research.json", oyuncular->insan_imparatorlugu.arastirma_seviyesi.baslik, oyuncular->insan_imparatorlugu.arastirma_seviyesi.hedef);
 
-    //extrack_effect2("Files/research.json", oyuncular->insan_imparatorlugu.arastirma_seviyesi.baslik, oyuncular->insan_imparatorlugu.arastirma_seviyesi.seviye , oyuncular->insan_imparatorlugu.arastirma_seviyesi.aciklama);
-    //extract_effect2("Files/research.json", oyuncular->ork_legi.arastirma_seviyesi.baslik, oyuncular->ork_legi.arastirma_seviyesi.seviye , oyuncular->ork_legi.arastirma_seviyesi.aciklama);
 
 
     //birliklerin degerlerini ayristirir
@@ -836,7 +759,6 @@ int write_data(const char* url, const char* file_name) {
     
 
     curl_easy_setopt(curl, CURLOPT_URL, url);
-    //curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, fp);   
 
 
@@ -860,7 +782,7 @@ int write_data(const char* url, const char* file_name) {
 
 #define SCREEN_WIDTH 1920
 #define SCREEN_HEIGHT 1080
-#define HEX_SIZE 50   // Altıgenin kenar uzunluğu (büyütüldü)
+#define HEX_SIZE 50
 #define HEALTH_BAR_WIDTH 25 
 #define HEALTH_BAR_HEIGHT 5 
 
@@ -868,31 +790,29 @@ typedef struct {
     int x, y;
     float health;
     int units;
-    SDL_Texture *texture; // Dokuyu depolamak için bir alan ekleyin
+    SDL_Texture *texture; 
 } Hex;
 
 void drawHexagon(SDL_Renderer *renderer, int x, int y, int size) {
-    const double angle_step = M_PI / 3.0; // 60 derecelik açı adımı
-    SDL_Point points[7]; // 6 köşe + kapanış noktası (ilk noktaya dönüş)
+    const double angle_step = M_PI / 3.0; 
+    SDL_Point points[7]; 
 
     for (int i = 0; i < 6; i++) {
         double angle = i * angle_step;
         points[i].x = x + size * cos(angle);
         points[i].y = y + size * sin(angle);
     }
-    points[6] = points[0]; // Altıgeni kapatmak için ilk köşeye dönüyoruz
+    points[6] = points[0]; 
 
     SDL_RenderDrawLines(renderer, points, 7);
 }
 
 void drawTexture(SDL_Renderer *renderer, SDL_Texture *texture, int x, int y, int size) {
-    // Dokuyu altıgenin merkezine yerleştirin
     int texture_width, texture_height;
     SDL_QueryTexture(texture, NULL, NULL, &texture_width, &texture_height);
 
-    // Altıgen boyutunu kullanarak dokunun boyutunu ayarla
-    int new_width = size * 1.5; // Altıgenin %80'i kadar boyut
-    int new_height = (texture_height * new_width) / texture_width; // Görselin oranını koru
+    int new_width = size * 1.5; 
+    int new_height = (texture_height * new_width) / texture_width; 
 
     SDL_Rect renderQuad = {
         x - new_width / 2,
@@ -907,28 +827,17 @@ void drawTexture(SDL_Renderer *renderer, SDL_Texture *texture, int x, int y, int
 void drawHealthBar(SDL_Renderer *renderer, Hex hex);
 
 
-// Altıgenleri başlatan fonksiyon
-//void initializeHexes(int a, int b,Hex hexes[20][20], float start_x, float start_y, float hex_height, SDL_Texture *hex_texture) {
-    
-//}
-
-// Sağlık çubuğunu çizen fonksiyon
 void drawHealthBar(SDL_Renderer *renderer, Hex hex) {
-    // Sağlık yüzdesini hesapla (0-100 arasında)
     float healthPercentage = (float)hex.health;
     
-    // Sağlık çubuğunun genişliğini sağlık yüzdesine göre ayarla
     float barWidth = HEALTH_BAR_WIDTH * healthPercentage;
     
-    // Sağlık çubuğunun pozisyonunu belirle (Hexagon'un üst kısmında ortalanmış)
     float barX = hex.x - (HEALTH_BAR_WIDTH / 2);
-    float barY = hex.y - HEX_SIZE - HEALTH_BAR_HEIGHT + 10; // Hexagon'un üstünde 5 piksel aşağıda
+    float barY = hex.y - HEX_SIZE - HEALTH_BAR_HEIGHT + 10;
     
-    // Sağlık çubuğunu kırmızı renkte çiz (örnek olarak kırmızı rengi seçtik)
 
     if(hex.health < 0.2) {
 
-    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // Kırmızı renk
     }
     else if(hex.health < 0.5) {
 
@@ -942,10 +851,7 @@ void drawHealthBar(SDL_Renderer *renderer, Hex hex) {
     SDL_Rect healthBarRect = { barX, barY, barWidth, HEALTH_BAR_HEIGHT };
     SDL_RenderFillRect(renderer, &healthBarRect);
 
-    // Beyaz kenarlık çiz
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 0); // Beyaz renk
-    //SDL_Rect borderRect = { barX, barY, HEALTH_BAR_WIDTH, HEALTH_BAR_HEIGHT };
-    //SDL_RenderDrawRect(renderer, &borderRect);
 }
 
 
@@ -1016,85 +922,19 @@ int main(void) {
     char buffer[1024];
     char json_data[1024] = { 0 };
 
-    // Dosya içeriğini oku
     while (fgets(buffer, sizeof(buffer), file) != NULL) {
         strcat(json_data, buffer);
     }
     fclose(file);
 
-    // Oyuncu yapısını oluştur ve JSON verisini parse et
     Oyuncular oyuncular = { 0 };
-    /*Piyadeler piyadeler;
-    Okcular okcular;
-    Suvariler suvariler;
-    Mizrakcilar mizrakcilar;
-    Ork_Dovusculeri ork_dovusculeri;
-    kusatma_Makineleri kusatma_makineleri;
-    Varg_Binicileri varg_binicileri;
-    Troller troller;
-    Birimler birimler;
-    ArastirmaSeviyesi arastirma_seviyesi;
-    KahramanlarVeCanavarlar kahramanlar_ve_canavarlar;
-    */
+
 
 
     json_parse(json_data, &oyuncular);
 
-    //printf("%s\n", oyuncular.ork_legi.arastirma_seviyesi.aciklama);
-    //printf("%s\n", oyuncular.insan_imparatorlugu.arastirma_seviyesi.aciklama);
 
-    //printf("Ork arastırma degeri: %d\n", oyuncular.ork_legi.arastirma_seviyesi.deger);
-    //printf("Insan arastırma degeri: %d\n", oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger);
-
-    // İnsan kahramanları ve canavarları ayrıştır
-    
-
-    //printf("%d\n", oyuncular.insan_imparatorlugu.birimler.okcular.sayi);
-
-    //printf("%d\n", oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_degeri);
-    //printf("%d\n", oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_degeri);
-    //printf("%d\n", oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.etki_degeri);
-    //printf("%d\n", oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_degeri);
-
-
-    //printf("%s\n", oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.aciklama);
-    //printf("%s\n", oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.aciklama);
-
-    //printf("%s\n", oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.aciklama);
-    //printf("%s\n", oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.aciklama);
-
-    //printf("%s\n", oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_turu);
-    //printf("%s\n", oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_turu);
-
-    //printf("%s\n", oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_turu);
-    //printf("%s\n", oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.etki_turu);
- 
- 
- /*
-    printf("İnsan İmparatorluğu Birimleri:\n");
-    printf("Piyadeler: %d\n", oyuncular.insan_imparatorlugu.birimler.piyadeler);
-    printf("Süvariler: %d\n", oyuncular.insan_imparatorlugu.birimler.suvariler);
-    printf("okcular: %d\n", oyuncular.insan_imparatorlugu.birimler.okcular);
-
-    printf("Kahraman: %s\n", oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.kahramanlar);
-    printf("Canavar: %s\n", oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.canavarlar);
-    printf("Savunma Ustalığı: %d\n", oyuncular.insan_imparatorlugu.arastirma_seviyesi.savunma_ustaligi);
-
-    printf("\nOrk Lejisi Birimleri:\n");
-    printf("Ork Dövüşçüleri: %d\n", oyuncular.ork_legi.birimler.ork_dovusculeri);
-    printf("Mızrakçılar: %d\n", oyuncular.ork_legi.birimler.mizrakcilar);
-    printf("Kahraman: %s\n", oyuncular.ork_legi.kahramanlar_ve_canavarlar.kahramanlar);
-    printf("Canavar: %s\n", oyuncular.ork_legi.kahramanlar_ve_canavarlar.canavarlar);
-    printf("Saldırı Geliştirmesi: %d\n", oyuncular.ork_legi.arastirma_seviyesi.saldiri_gelistirmesi);
-*/
-
-
-
-        //oyuncular.insan_imparatorlugu.birimler.piyadeler.kritik_sans = extract_value("Files/unit_types.json", "piyadeler", "kritik_sans");
-        //oyuncular.insan_imparatorlugu.birimler.piyadeler.saldiri = extract_value("Files/unit_types.json", "piyadeler", "saldiri");
-        //oyuncular.insan_imparatorlugu.birimler.piyadeler.savunma = extract_value("Files/unit_types.json", "piyadeler", "savunma");
-        //oyuncular.insan_imparatorlugu.birimler.piyadeler.saglik = extract_value("Files/unit_types.json", "piyadeler", "saglik");
-    //savas similasyonu oluştur
+   
     FILE *savas = fopen("savas_sim.txt", "w");
 
 
@@ -1245,7 +1085,6 @@ int main(void) {
         int troller_kayip = 0;
         int troller_sayig = (oyuncular.ork_legi.birimler.troller.sayi);
 
-        //printf("piyadeler_saldiri: %f\n", piyadeler_saldiri);
 
     for (int adim = 1; adim != 1000; adim++) {
 
@@ -1262,51 +1101,92 @@ int main(void) {
                 if(adim == 1){
                     fprintf(savas, "(");
                 }
-            if((adim == 1) && (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_turu == "saldiri") && ((oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.aciklama == "piyadeler") || (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.aciklama == "tum_birimler"))) {
-            
-                piyadeler_saldiri = piyadeler_saldiri * (1 + (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_degeri / 100.0)); 
-                fprintf(savas, "%s ile %%%d saldırı bonusu ile: %f ", oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.canavarlar, oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_degeri, piyadeler_saldiri);
+            if ((adim == 1) && 
+                (strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_turu, "saldiri") == 0) && 
+                ((strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.aciklama, "piyadeler") == 0) || 
+                 (strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.aciklama, "tum_birimler") == 0))) {
+                
+                piyadeler_saldiri *= (1 + (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_degeri / 100.0)); 
+                fprintf(savas, "%s ile %%%d saldırı bonusu ile: %f ", 
+                        oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.canavarlar, 
+                        oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_degeri, 
+                        piyadeler_saldiri);
+                //printf("%s\n", oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_turu);
+            }
 
+            if ((adim == 1) && 
+                (strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_turu, "saldiri") == 0) && 
+                ((strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.aciklama, "piyadeler") == 0) || 
+                 (strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.aciklama, "tum_birimler") == 0))) {
+                
+                piyadeler_saldiri *= (1 + (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_degeri / 100.0)); 
+                fprintf(savas, "%s ile %%%d saldırı bonusu ile: %f ", 
+                        oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.kahramanlar, 
+                        oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_degeri, 
+                        piyadeler_saldiri);
             }
-            if((adim == 1) && (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_turu == "saldiri") && ((oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.aciklama == "piyadeler") || (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.aciklama == "tum_birimler"))) {
-            
-                piyadeler_saldiri = piyadeler_saldiri * (1 + (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_degeri / 100.0)); 
-                fprintf(savas, "%s ile %%%d saldırı bonusu ile: %f ", oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.kahramanlar, oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_degeri, piyadeler_saldiri);
+
+            if ((adim == 1) && 
+                (strcmp(oyuncular.insan_imparatorlugu.arastirma_seviyesi.baslik, "saldiri_gelistirmesi") == 0) && 
+                ((strcmp(oyuncular.insan_imparatorlugu.arastirma_seviyesi.hedef, "piyadeler") == 0) || 
+                 (strcmp(oyuncular.insan_imparatorlugu.arastirma_seviyesi.hedef, "tum_birimler") == 0))) {
+                
+                piyadeler_saldiri *= (1 + (oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger / 100.0));
+                fprintf(savas, "araştırmanın %%%d etkisi ile: %f", 
+                        oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger, 
+                        piyadeler_saldiri);
             }
-            if((adim == 1) && (oyuncular.insan_imparatorlugu.arastirma_seviyesi.baslik == "saldiri_gelistirmesi") && ((oyuncular.insan_imparatorlugu.arastirma_seviyesi.aciklama == "piyadeler") || (oyuncular.insan_imparatorlugu.arastirma_seviyesi.aciklama == "tum_birimler"))) {
-            
-                piyadeler_saldiri = piyadeler_saldiri * (1 + (oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger / 100.0));
-                fprintf(savas, "araştırmanın %%%d etkisi ile: %f", oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger, piyadeler_saldiri);
-            }
-            if(adim == 1){
+
+            if (adim == 1) {
                 fprintf(savas, ")\n");
             }
-            if((adim != 1) && ((adim - 1) % 10 )== 0){
-                fprintf(savas, "Yorgunluk nedeniyle tüm birimlerin saldırıları %%10 azaldı Piyadelerin yeni saldırı gücü: %f\n", piyadeler_saldiri * 0.9);
-                piyadeler_saldiri = piyadeler_saldiri * 0.9;
 
+            if ((adim != 1) && ((adim - 1) % 10) == 0) {
+                fprintf(savas, "Yorgunluk nedeniyle tüm birimlerin saldırıları %%10 azaldı Piyadelerin yeni saldırı gücü: %f\n", piyadeler_saldiri * 0.9);
+                piyadeler_saldiri *= 0.9;
             }
-            if ( adim == 1) {
-                if((oyuncular.insan_imparatorlugu.arastirma_seviyesi.baslik == "elit_egitim") && ((oyuncular.insan_imparatorlugu.arastirma_seviyesi.aciklama == "piyadeler") || (oyuncular.insan_imparatorlugu.arastirma_seviyesi.aciklama == "tum_birimler"))) {
-                    fprintf(savas, "Elit_egitim arastırmasının etkisi ile kritik şans: %%%d + %%%d = %%%d\n", piyadeler_kritik_sans, oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger, piyadeler_kritik_sans + oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger);
-                    piyadeler_kritik_sans = piyadeler_kritik_sans + oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger;
+
+            if (adim == 1) {
+                if ((strcmp(oyuncular.insan_imparatorlugu.arastirma_seviyesi.baslik, "elit_egitim") == 0) && ((strcmp(oyuncular.insan_imparatorlugu.arastirma_seviyesi.hedef, "piyadeler") == 0) || (strcmp(oyuncular.insan_imparatorlugu.arastirma_seviyesi.hedef, "tum_birimler") == 0))) {
+                    
+                    fprintf(savas, "Elit_egitim araştırmasının etkisi ile kritik şans: %%%d + %%%d = %%%d\n", 
+                            piyadeler_kritik_sans, 
+                            oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger, 
+                            piyadeler_kritik_sans + oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger);
+
+                    piyadeler_kritik_sans += oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger;
                 }
-                if((oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_turu == "kritik_sans") && ((oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.aciklama == "piyadeler") || (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.aciklama == "tum_birimler"))) {
-                    fprintf(savas, "%s etkisi ile kritik şans: %%%d + %%%d = %%%d\n", oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.kahramanlar, piyadeler_kritik_sans, oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger, piyadeler_kritik_sans + oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger);
-                    piyadeler_kritik_sans = piyadeler_kritik_sans + oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_degeri;
+                if ((strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_turu, "kritik_sans") == 0) && ((strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.aciklama, "piyadeler") == 0) || (strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.aciklama, "tum_birimler") == 0))) {
+                    
+                    fprintf(savas, "%s etkisi ile kritik şans: %%%d + %%%d = %%%d\n", 
+                            oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.kahramanlar, 
+                            piyadeler_kritik_sans, 
+                            oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger, 
+                            piyadeler_kritik_sans + oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger);
+
+                    piyadeler_kritik_sans += oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_degeri;
                 }
-                if((oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_turu == "kritik_sans") && ((oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.aciklama == "piyadeler") || (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.aciklama == "tum_birimler"))) {
-                    fprintf(savas, "%s etkisi ile kritik şans: %%%d + %%%d = %%%d\n", oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.canavarlar, piyadeler_kritik_sans, oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger, piyadeler_kritik_sans + oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger);
-                    piyadeler_kritik_sans = piyadeler_kritik_sans + oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_degeri;
+                if ((strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_turu, "kritik_sans") == 0) && ((strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.aciklama, "piyadeler") == 0) || (strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.aciklama, "tum_birimler") == 0))) {
+                    
+                    fprintf(savas, "%s etkisi ile kritik şans: %%%d + %%%d = %%%d\n", 
+                            oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.canavarlar, 
+                            piyadeler_kritik_sans, 
+                            oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger, 
+                            piyadeler_kritik_sans + oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger);
+
+                    piyadeler_kritik_sans += oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_degeri;
                 }
 
                 fprintf(savas, "piyadeler kritik şans: %d\n", piyadeler_kritik_sans);
+                //printf("ilk adım: %d\n", adim);
 
-                if (adim != 1 && (adim % (int)ceil(pow((piyadeler_kritik_sans / 100.0), -1)) == 0)) {
-                    piyadeler_saldiri = piyadeler_saldiri * 1.5;
-                    fprintf(savas, "piyadelerin saldırı gücü bu turda kritik hasar sayesinde %%50 arttı: %f\n", piyadeler_saldiri);
-                }
+                
             }
+            if (adim != 1 && ((adim - 1) % (int)ceil(pow((piyadeler_kritik_sans / 100.0), -1)) == 0)) {
+                    piyadeler_saldiri *= 1.5;
+                    fprintf(savas, "piyadelerin saldırı gücü bu turda kritik hasar sayesinde %%50 arttı: %f\n", piyadeler_saldiri);
+                    //printf("333\n");
+                }
 
         
 
@@ -1327,53 +1207,72 @@ int main(void) {
                 fprintf(savas, "(");
             }
 
-            if((adim == 1) && (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_turu == "saldiri") && ((oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.aciklama == "okcular") || (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.aciklama == "tum_birimler"))) {
-            
+            if ((adim == 1) && (strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_turu, "saldiri") == 0) && 
+                ((strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.aciklama, "okcular") == 0) || 
+                 strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.aciklama, "tum_birimler") == 0)) {
+                
                 okcular_saldiri = okcular_saldiri * (1 + (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_degeri / 100.0)); 
-                fprintf(savas, "%s ile %%%d saldırı bonusu ile: %.f ", oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.canavarlar, oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_degeri, okcular_saldiri);
-
+                fprintf(savas, "%s ile %%%d saldırı bonusu ile: %f ", oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.canavarlar, oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_degeri, okcular_saldiri);
             }
-            if((adim == 1) && (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_turu == "saldiri") && ((oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.aciklama == "okcular") || (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.aciklama == "tum_birimler"))) {
-            
+
+            if ((adim == 1) && (strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_turu, "saldiri") == 0) && 
+                ((strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.aciklama, "okcular") == 0) || 
+                 strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.aciklama, "tum_birimler") == 0)) {
+                
                 okcular_saldiri = okcular_saldiri * (1 + (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_degeri / 100.0)); 
-                fprintf(savas, "%s ile %%%d saldırı bonusu ile: %.f ", oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.kahramanlar, oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_degeri, okcular_saldiri);
-            }
-            if((adim == 1) && (oyuncular.insan_imparatorlugu.arastirma_seviyesi.baslik == "saldiri_gelistirmesi") && ((oyuncular.insan_imparatorlugu.arastirma_seviyesi.aciklama == "okcular") || (oyuncular.insan_imparatorlugu.arastirma_seviyesi.aciklama == "tum_birimler"))) {
-            
-                okcular_saldiri = okcular_saldiri * (1 + (oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger / 100.0));
-                fprintf(savas, "araştırmanın %%%d etkisi ile: %.f", oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger, okcular_saldiri);
+                fprintf(savas, "%s ile %%%d saldırı bonusu ile: %f ", oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.kahramanlar, oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_degeri, okcular_saldiri);
             }
 
-            if(adim == 1){
+            if ((adim == 1) && (strcmp(oyuncular.insan_imparatorlugu.arastirma_seviyesi.baslik, "saldiri_gelistirmesi") == 0) && 
+                ((strcmp(oyuncular.insan_imparatorlugu.arastirma_seviyesi.hedef, "okcular") == 0) || 
+                 strcmp(oyuncular.insan_imparatorlugu.arastirma_seviyesi.hedef, "tum_birimler") == 0)) {
+                
+                okcular_saldiri = okcular_saldiri * (1 + (oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger / 100.0));
+                fprintf(savas, "araştırmanın %%%d etkisi ile: %f", oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger, okcular_saldiri);
+            }
+
+            if (adim == 1) {
                 fprintf(savas, ")\n");
             }
-            if((adim != 1) && ((adim - 1) % 10 )== 0){
-                fprintf(savas, "Yorgunluk nedeniyle tüm birimlerin saldırıları %%10 azaldı Okcuların yeni saldırı gücü: %f\n", okcular_saldiri * 0.9);
-                okcular_saldiri = okcular_saldiri * 0.9;
 
+            if ((adim != 1) && ((adim - 1) % 10) == 0) {
+                fprintf(savas, "Yorgunluk nedeniyle tüm birimlerin saldırıları %%10 azaldı Okçuların yeni saldırı gücü: %f\n", okcular_saldiri * 0.9);
+                okcular_saldiri = okcular_saldiri * 0.9;
             }
-            if ( adim == 1) {
-                if((oyuncular.insan_imparatorlugu.arastirma_seviyesi.baslik == "elit_egitim") && ((oyuncular.insan_imparatorlugu.arastirma_seviyesi.aciklama == "okcular") || (oyuncular.insan_imparatorlugu.arastirma_seviyesi.aciklama == "tum_birimler"))) {
+
+            if (adim == 1) {
+                if ((strcmp(oyuncular.insan_imparatorlugu.arastirma_seviyesi.baslik, "elit_egitim") == 0) && 
+                    ((strcmp(oyuncular.insan_imparatorlugu.arastirma_seviyesi.hedef, "okcular") == 0) || 
+                     strcmp(oyuncular.insan_imparatorlugu.arastirma_seviyesi.hedef, "tum_birimler") == 0)) {
+                    
                     fprintf(savas, "Elit_egitim arastırmasının etkisi ile kritik şans: %%%d + %%%d = %%%d\n", okcular_kritik_sans, oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger, okcular_kritik_sans + oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger);
-                    okcular_kritik_sans = okcular_kritik_sans + oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger;
+                    okcular_kritik_sans += oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger;
                 }
-                if((oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_turu == "kritik_sans") && ((oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.aciklama == "okcular") || (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.aciklama == "tum_birimler"))) {
-                    fprintf(savas, "%s etkisi ile kritik şans: %%%d + %%%d = %%%d\n", oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.kahramanlar, okcular_kritik_sans, oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger, okcular_kritik_sans + oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger);
-                    okcular_kritik_sans = okcular_kritik_sans + oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_degeri;
+
+                if ((strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_turu, "kritik_sans") == 0) && 
+                    ((strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.aciklama, "okcular") == 0) || 
+                     strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.aciklama, "tum_birimler") == 0)) {
+                    
+                    fprintf(savas, "%s etkisi ile kritik şans: %%%d + %%%d = %%%d\n", oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.kahramanlar, okcular_kritik_sans, oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_degeri, okcular_kritik_sans + oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_degeri);
+                    okcular_kritik_sans += oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_degeri;
                 }
-                if((oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_turu == "kritik_sans") && ((oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.aciklama == "okcular") || (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.aciklama == "tum_birimler"))) {
-                    fprintf(savas, "%s etkisi ile kritik şans: %%%d + %%%d = %%%d\n", oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.canavarlar, okcular_kritik_sans, oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger, okcular_kritik_sans + oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger);
-                    okcular_kritik_sans = okcular_kritik_sans + oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_degeri;
+
+                if ((strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_turu, "kritik_sans") == 0) && 
+                    ((strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.aciklama, "okcular") == 0) || 
+                     strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.aciklama, "tum_birimler") == 0)) {
+                    
+                    fprintf(savas, "%s etkisi ile kritik şans: %%%d + %%%d = %%%d\n", oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.canavarlar, okcular_kritik_sans, oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_degeri, okcular_kritik_sans + oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_degeri);
+                    okcular_kritik_sans += oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_degeri;
                 }
 
                 fprintf(savas, "okcular kritik şans: %d\n", okcular_kritik_sans);
 
-                if (adim != 1 && (adim % (int)ceil(pow((okcular_kritik_sans / 100.0), -1)) == 0)) {
-                    okcular_saldiri = okcular_saldiri * 1.5;
-                    fprintf(savas, "okcularin saldırı gücü bu turda kritik hasar sayesinde %%50 arttı: %f\n", okcular_saldiri);
-
-                }
+                
             }
+            if (adim != 1 && ((adim - 1) % (int)ceil(pow((okcular_kritik_sans / 100.0), -1)) == 0)) {
+                    okcular_saldiri *= 1.5;
+                    fprintf(savas, "okçuların saldırı gücü bu turda kritik hasar sayesinde %%50 arttı: %f\n", okcular_saldiri);
+                }
 
         }
         //süvariler
@@ -1389,54 +1288,72 @@ int main(void) {
                 fprintf(savas, "(");
             }
 
-            if((adim == 1) && (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_turu == "saldiri") && ((oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.aciklama == "suvariler") || (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.aciklama == "tum_birimler"))) {
-            
-                suvariler_saldiri = suvariler_saldiri * (1 + (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_degeri / 100.0)); 
-                fprintf(savas, "%s ile %%%d saldırı bonusu ile: %.f ", oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.canavarlar, oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_degeri, suvariler_saldiri);
+            if ((adim == 1) && (strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_turu, "saldiri") == 0) && 
+                ((strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.aciklama, "suvariler") == 0) || 
+                 strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.aciklama, "tum_birimler") == 0)) {
+                
+                suvariler_saldiri = suvariler_saldiri * (1 + (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_degeri / 100.0));
+                fprintf(savas, "%s ile %%%d saldırı bonusu ile: %f ", oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.canavarlar, oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_degeri, suvariler_saldiri);
+            }
 
+            if ((adim == 1) && (strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_turu, "saldiri") == 0) && 
+                ((strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.aciklama, "suvariler") == 0) || 
+                 strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.aciklama, "tum_birimler") == 0)) {
+                
+                suvariler_saldiri = suvariler_saldiri * (1 + (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_degeri / 100.0));
+                fprintf(savas, "%s ile %%%d saldırı bonusu ile: %f ", oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.kahramanlar, oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_degeri, suvariler_saldiri);
             }
-            if((adim == 1) && (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_turu == "saldiri") && ((oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.aciklama == "suvariler") || (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.aciklama == "tum_birimler"))) {
-            
-                suvariler_saldiri = suvariler_saldiri * (1 + (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_degeri / 100.0)); 
-                fprintf(savas, "%s ile %%%d saldırı bonusu ile: %.f ", oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.kahramanlar, oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_degeri, okcular_saldiri);
-            }
-            if((adim == 1) && (oyuncular.insan_imparatorlugu.arastirma_seviyesi.baslik == "saldiri_gelistirmesi") && ((oyuncular.insan_imparatorlugu.arastirma_seviyesi.aciklama == "suvariler") || (oyuncular.insan_imparatorlugu.arastirma_seviyesi.aciklama == "tum_birimler"))) {
-            
+
+            if ((adim == 1) && (strcmp(oyuncular.insan_imparatorlugu.arastirma_seviyesi.baslik, "saldiri_gelistirmesi") == 0) && 
+                ((strcmp(oyuncular.insan_imparatorlugu.arastirma_seviyesi.hedef, "suvariler") == 0) || 
+                 strcmp(oyuncular.insan_imparatorlugu.arastirma_seviyesi.hedef, "tum_birimler") == 0)) {
+                
                 suvariler_saldiri = suvariler_saldiri * (1 + (oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger / 100.0));
-                fprintf(savas, "araştırmanın %%%d etkisi ile: %.f", oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger, suvariler_saldiri);
+                fprintf(savas, "araştırmanın %%%d etkisi ile: %f", oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger, suvariler_saldiri);
             }
 
-
-            if(adim == 1){
+            if (adim == 1) {
                 fprintf(savas, ")\n");
             }
 
-            if((adim != 1) && ((adim - 1) % 10 )== 0){
+            if ((adim != 1) && ((adim - 1) % 10) == 0) {
                 fprintf(savas, "Yorgunluk nedeniyle tüm birimlerin saldırıları %%10 azaldı Süvarilerin yeni saldırı gücü: %f\n", suvariler_saldiri * 0.9);
                 suvariler_saldiri = suvariler_saldiri * 0.9;
-
             }
-            if ( adim == 1) {
-                if((oyuncular.insan_imparatorlugu.arastirma_seviyesi.baslik == "elit_egitim") && ((oyuncular.insan_imparatorlugu.arastirma_seviyesi.aciklama == "suvariler") || (oyuncular.insan_imparatorlugu.arastirma_seviyesi.aciklama == "tum_birimler"))) {
+
+            if (adim == 1) {
+                if ((strcmp(oyuncular.insan_imparatorlugu.arastirma_seviyesi.baslik, "elit_egitim") == 0) && 
+                    ((strcmp(oyuncular.insan_imparatorlugu.arastirma_seviyesi.hedef, "suvariler") == 0) || 
+                     strcmp(oyuncular.insan_imparatorlugu.arastirma_seviyesi.hedef, "tum_birimler") == 0)) {
+                    
                     fprintf(savas, "Elit_egitim arastırmasının etkisi ile kritik şans: %%%d + %%%d = %%%d\n", suvariler_kritik_sans, oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger, suvariler_kritik_sans + oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger);
-                    suvariler_kritik_sans = suvariler_kritik_sans + oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger;
-                }
-                if((oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_turu == "kritik_sans") && ((oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.aciklama == "suvariler") || (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.aciklama == "tum_birimler"))) {
-                    fprintf(savas, "%s etkisi ile kritik şans: %%%d + %%%d = %%%d\n", oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.kahramanlar, suvariler_kritik_sans, oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger, suvariler_kritik_sans + oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger);
-                    suvariler_kritik_sans = suvariler_kritik_sans + oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_degeri;
-                }
-                if((oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_turu == "kritik_sans") && ((oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.aciklama == "suvariler") || (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.aciklama == "tum_birimler"))) {
-                    fprintf(savas, "%s etkisi ile kritik şans: %%%d + %%%d = %%%d\n", oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.canavarlar, suvariler_kritik_sans, oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger, suvariler_kritik_sans + oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger);
-                    suvariler_kritik_sans = suvariler_kritik_sans + oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_degeri;
+                    suvariler_kritik_sans += oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger;
                 }
 
-                fprintf(savas, "suvariler kritik şans: %d\n", suvariler_kritik_sans);
-
-                if (adim != 1 && (adim % (int)ceil(pow((suvariler_kritik_sans / 100.0), -1)) == 0)) {
-                    suvariler_saldiri = suvariler_saldiri * 1.5;
-                    fprintf(savas, "suvarilerin saldırı gücü bu turda kritik hasar sayesinde %%50 arttı: %f\n", suvariler_saldiri);
+                if ((strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_turu, "kritik_sans") == 0) && 
+                    ((strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.aciklama, "suvariler") == 0) || 
+                     strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.aciklama, "tum_birimler") == 0)) {
+                    
+                    fprintf(savas, "%s etkisi ile kritik şans: %%%d + %%%d = %%%d\n", oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.kahramanlar, suvariler_kritik_sans, oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_degeri, suvariler_kritik_sans + oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_degeri);
+                    suvariler_kritik_sans += oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_degeri;
                 }
+
+                if ((strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_turu, "kritik_sans") == 0) && 
+                    ((strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.aciklama, "suvariler") == 0) || 
+                     strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.aciklama, "tum_birimler") == 0)) {
+                    
+                    fprintf(savas, "%s etkisi ile kritik şans: %%%d + %%%d = %%%d\n", oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.canavarlar, suvariler_kritik_sans, oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_degeri, suvariler_kritik_sans + oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_degeri);
+                    suvariler_kritik_sans += oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_degeri;
+                }
+
+                fprintf(savas, "süvariler kritik şans: %d\n", suvariler_kritik_sans);
+
+                
             }
+            if (adim != 1 && ((adim-1) % (int)ceil(pow((suvariler_kritik_sans / 100.0), -1)) == 0)) {
+                    suvariler_saldiri *= 1.5;
+                    fprintf(savas, "süvarilerin saldırı gücü bu turda kritik hasar sayesinde %%50 arttı: %f\n", suvariler_saldiri);
+                }
 
         }
         //kusatma_makineleri
@@ -1451,57 +1368,76 @@ int main(void) {
             if(adim == 1) {
                 fprintf(savas, "(");
             }
-            if((adim == 1) && (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_turu == "saldiri") && ((oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.aciklama == "kusatma_makineleri") || (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.aciklama == "tum_birimler"))) {
-            
-                kusatma_makineleri_saldiri = kusatma_makineleri_saldiri * (1 + (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_degeri / 100.0)); 
-                fprintf(savas, "%s ile %%%d saldırı bonusu ile: %.f ", oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.canavarlar, oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_degeri, kusatma_makineleri_saldiri);
+            if ((adim == 1) && (strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_turu, "saldiri") == 0) && 
+                ((strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.aciklama, "kusatma_makineleri") == 0) || 
+                 strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.aciklama, "tum_birimler") == 0)) {
+                
+                kusatma_makineleri_saldiri = kusatma_makineleri_saldiri * (1 + (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_degeri / 100.0));
+                fprintf(savas, "%s ile %%%d saldırı bonusu ile: %f ", oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.canavarlar, oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_degeri, kusatma_makineleri_saldiri);
+            }
 
+            if ((adim == 1) && (strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_turu, "saldiri") == 0) && 
+                ((strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.aciklama, "kusatma_makineleri") == 0) || 
+                 strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.aciklama, "tum_birimler") == 0)) {
+                
+                kusatma_makineleri_saldiri = kusatma_makineleri_saldiri * (1 + (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_degeri / 100.0));
+                fprintf(savas, "%s ile %%%d saldırı bonusu ile: %f ", oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.kahramanlar, oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_degeri, kusatma_makineleri_saldiri);
             }
-            if((adim == 1) && (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_turu == "saldiri") && ((oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.aciklama == "kusatma_makineleri") || (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.aciklama == "tum_birimler"))) {
-            
-                kusatma_makineleri_saldiri = kusatma_makineleri_saldiri * (1 + (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_degeri / 100.0)); 
-                fprintf(savas, "%s ile %%%d saldırı bonusu ile: %.f ", oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.kahramanlar, oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_degeri, kusatma_makineleri_saldiri);
-            }
-            if((adim == 1) && (oyuncular.insan_imparatorlugu.arastirma_seviyesi.baslik == "saldiri_gelistirmesi") && ((oyuncular.insan_imparatorlugu.arastirma_seviyesi.aciklama == "kusatma_makineleri") || (oyuncular.insan_imparatorlugu.arastirma_seviyesi.aciklama == "tum_birimler"))) {
-            
+
+            if ((adim == 1) && (strcmp(oyuncular.insan_imparatorlugu.arastirma_seviyesi.baslik, "saldiri_gelistirmesi") == 0) && 
+                ((strcmp(oyuncular.insan_imparatorlugu.arastirma_seviyesi.hedef, "kusatma_makineleri") == 0) || 
+                 strcmp(oyuncular.insan_imparatorlugu.arastirma_seviyesi.hedef, "tum_birimler") == 0)) {
+                
                 kusatma_makineleri_saldiri = kusatma_makineleri_saldiri * (1 + (oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger / 100.0));
-                fprintf(savas, "araştırmanın %%%d etkisi ile: %.f", oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger, kusatma_makineleri_saldiri);
+                fprintf(savas, "araştırmanın %%%d etkisi ile: %f", oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger, kusatma_makineleri_saldiri);
             }
-            if(adim == 1) {
+
+            if (adim == 1) {
                 fprintf(savas, ")\n");
             }
-            if((adim != 1) && ((adim - 1) % 10 ) == 0){
-                fprintf(savas, "Yorgunluk nedeniyle tüm birimlerin saldırıları %%10 azaldı Kuşatma_makineleri yeni saldırı gücü: %f\n", kusatma_makineleri_saldiri * 0.9);
+
+            if ((adim != 1) && ((adim - 1) % 10) == 0) {
+                fprintf(savas, "Yorgunluk nedeniyle tüm birimlerin saldırıları %%10 azaldı Kuşatma makinelerinin yeni saldırı gücü: %f\n", kusatma_makineleri_saldiri * 0.9);
                 kusatma_makineleri_saldiri = kusatma_makineleri_saldiri * 0.9;
-
             }
-            if ( adim == 1) {
-                if((oyuncular.insan_imparatorlugu.arastirma_seviyesi.baslik == "elit_egitim") && ((oyuncular.insan_imparatorlugu.arastirma_seviyesi.aciklama == "kusatma_makineleri") || (oyuncular.insan_imparatorlugu.arastirma_seviyesi.aciklama == "tum_birimler"))) {
-                    fprintf(savas, "Elit_egitim araştırmasının etkisi ile kritik şans: %%%d + %%%d = %%%d\n", kusatma_makineleri_kritik_sans, oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger, piyadeler_kritik_sans + oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger);
-                    kusatma_makineleri_kritik_sans = kusatma_makineleri_kritik_sans + oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger;
-                }
-                if((oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_turu == "kritik_sans") && ((oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.aciklama == "kusatma_makineleri") || (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.aciklama == "tum_birimler"))) {
-                    fprintf(savas, "%s etkisi ile kritik şans: %%%d + %%%d = %%%d\n", oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.kahramanlar, kusatma_makineleri_kritik_sans, oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger, kusatma_makineleri_kritik_sans + oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger);
-                    kusatma_makineleri_kritik_sans = kusatma_makineleri_kritik_sans + oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_degeri;
-                }
-                if((oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_turu == "kritik_sans") && ((oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.aciklama == "kusatma_makineleri") || (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.aciklama == "tum_birimler"))) {
-                    fprintf(savas, "%s etkisi ile kritik şans: %%%d + %%%d = %%%d\n", oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.canavarlar, kusatma_makineleri_kritik_sans, oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger, kusatma_makineleri_kritik_sans + oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger);
-                    kusatma_makineleri_kritik_sans = kusatma_makineleri_kritik_sans + oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_degeri;
+
+            if (adim == 1) {
+                if ((strcmp(oyuncular.insan_imparatorlugu.arastirma_seviyesi.baslik, "elit_egitim") == 0) && 
+                    ((strcmp(oyuncular.insan_imparatorlugu.arastirma_seviyesi.hedef, "kusatma_makineleri") == 0) || 
+                     strcmp(oyuncular.insan_imparatorlugu.arastirma_seviyesi.hedef, "tum_birimler") == 0)) {
+                    
+                    fprintf(savas, "Elit_egitim araştırmasının etkisi ile kritik şans: %%%d + %%%d = %%%d\n", kusatma_makineleri_kritik_sans, oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger, kusatma_makineleri_kritik_sans + oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger);
+                    kusatma_makineleri_kritik_sans += oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger;
                 }
 
-                fprintf(savas, "kusatma_makineleri kritik şans: %d\n", kusatma_makineleri_kritik_sans);
-                if(adim == 1) {
-                    fprintf(savas, "(");
+                if ((strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_turu, "kritik_sans") == 0) && 
+                    ((strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.aciklama, "kusatma_makineleri") == 0) || 
+                     strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.aciklama, "tum_birimler") == 0)) {
+                    
+                    fprintf(savas, "%s etkisi ile kritik şans: %%%d + %%%d = %%%d\n", oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.canavarlar, kusatma_makineleri_kritik_sans, oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_degeri, kusatma_makineleri_kritik_sans + oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_degeri);
+                    kusatma_makineleri_kritik_sans += oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_degeri;
                 }
 
-                if (adim != 1 && (adim % (int)ceil(pow((kusatma_makineleri_kritik_sans / 100.0), -1)) == 0)) {
-                    kusatma_makineleri_saldiri = kusatma_makineleri_saldiri * 1.5;
-                    fprintf(savas, "kusatma_makinelerinin saldırı gücü bu turda kritik hasar sayesinde %%50 arttı: %f\n", kusatma_makineleri_saldiri);
+                if ((strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_turu, "kritik_sans") == 0) && 
+                    ((strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.aciklama, "kusatma_makineleri") == 0) || 
+                     strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.aciklama, "tum_birimler") == 0)) {
+                    
+                    fprintf(savas, "%s etkisi ile kritik şans: %%%d + %%%d = %%%d\n", oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.kahramanlar, kusatma_makineleri_kritik_sans, oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_degeri, kusatma_makineleri_kritik_sans + oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_degeri);
+                    kusatma_makineleri_kritik_sans += oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_degeri;
                 }
+
+                fprintf(savas, "kuşatma makineleri kritik şans: %d\n", kusatma_makineleri_kritik_sans);
+
+                
             }
+            if (adim != 1 && ((adim - 1) % (int)ceil(pow((kusatma_makineleri_kritik_sans / 100.0), -1)) == 0)) {
+                    kusatma_makineleri_saldiri *= 1.5;
+                    fprintf(savas, "kuşatma makinelerinin saldırı gücü bu turda kritik hasar sayesinde %%50 arttı: %f\n", kusatma_makineleri_saldiri);
+                }
+            
             
 
-            fprintf(savas, ")\n");
+            //fprintf(savas, ")\n");
 
         }
         
@@ -1520,17 +1456,17 @@ int main(void) {
                 fprintf(savas, "(");
             }
 
-            if((adim == 1) && (oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_turu == "savunma") && ((oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_turu == "ork_dovusculeri") || (oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_turu == "tum_birimler"))) {
+            if((adim == 1) && ((strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_turu, "savunma")) == 0) && (( (strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_turu, "ork_dovusculeri")) == 0) || ( strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_turu, "tum_birimler")) == 0)) {
                 ork_dovusculeri_savunma = ork_dovusculeri_savunma * (1 + (oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_degeri / 100.0));
                 fprintf(savas, "%s ile %%%d savunma bonusu ile: %.f\n", oyuncular.ork_legi.kahramanlar_ve_canavarlar.canavarlar, oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_degeri, ork_dovusculeri_savunma);
             }
 
-            if((adim == 1) && (oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.etki_turu == "savunma") && ((oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.etki_turu == "ork_dovusculeri") || (oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.etki_turu == "tum_birimler"))) {
+            if((adim == 1) && ((strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.etki_turu, "savunma")) == 0) && (( (strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.etki_turu, "ork_dovusculeri")) == 0) || ( strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.etki_turu, "tum_birimler")) == 0)) {
                 ork_dovusculeri_savunma = ork_dovusculeri_savunma * (1 + (oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.etki_degeri / 100.0));
                 fprintf(savas, "%s ile %%%d savunma bonusu ile: %.f\n", oyuncular.ork_legi.kahramanlar_ve_canavarlar.kahramanlar, oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.etki_degeri, ork_dovusculeri_savunma);
             }
 
-            if((adim == 1) && (oyuncular.ork_legi.arastirma_seviyesi.baslik == "savunma_ustaligi") && ((oyuncular.ork_legi.arastirma_seviyesi.hedef == "ork_dovusculeri") || (oyuncular.ork_legi.arastirma_seviyesi.hedef == "tum_birimler"))) {
+            if((adim == 1) && ( strcmp(oyuncular.ork_legi.arastirma_seviyesi.baslik, "savunma_ustaligi") == 0) && (( (strcmp(oyuncular.ork_legi.arastirma_seviyesi.hedef, "ork_dovusculeri")) == 0) || ( strcmp(oyuncular.ork_legi.arastirma_seviyesi.hedef, "tum_birimler")) == 0)) {
                 ork_dovusculeri_savunma = ork_dovusculeri_savunma * (1 + (oyuncular.ork_legi.arastirma_seviyesi.deger / 100.0));
                 fprintf(savas, "%s ile %%%d savunma bonusu ile: %.f\n", oyuncular.ork_legi.arastirma_seviyesi.baslik, oyuncular.ork_legi.arastirma_seviyesi.deger, ork_dovusculeri_savunma);
 
@@ -1560,17 +1496,17 @@ int main(void) {
                 fprintf(savas, "(");
             }
 
-            if((adim == 1) && (oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_turu == "savunma") && ((oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_turu == "mizrakcilar") || (oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_turu == "tum_birimler"))) {
+            if((adim == 1) && ( (strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_turu, "savunma")) == 0) && (( (strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_turu, "mizrakcilar")) == 0) || ( strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_turu, "tum_birimler")) == 0)) {
                 mizrakcilar_savunma = mizrakcilar_savunma * (1 + (oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_degeri / 100.0));
                 fprintf(savas, "%s ile %%%d savunma bonusu ile: %.f\n", oyuncular.ork_legi.kahramanlar_ve_canavarlar.canavarlar, oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_degeri, mizrakcilar_savunma);
             }
 
-            if((adim == 1) && (oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.etki_turu == "savunma") && ((oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.etki_turu == "mizrakcilar") || (oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.etki_turu == "tum_birimler"))) {
+            if((adim == 1) && ( (strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.etki_turu, "savunma")) == 0) && (( (strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.etki_turu, "mizrakcilar")) == 0) || ( strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.etki_turu, "tum_birimler")) == 0)) {
                 mizrakcilar_savunma = mizrakcilar_savunma * (1 + (oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.etki_degeri / 100.0));
                 fprintf(savas, "%s ile %%%d savunma bonusu ile: %.f\n", oyuncular.ork_legi.kahramanlar_ve_canavarlar.kahramanlar, oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.etki_degeri, mizrakcilar_savunma);
             }
 
-            if((adim == 1) && (oyuncular.ork_legi.arastirma_seviyesi.baslik == "savunma_ustaligi") && ((oyuncular.ork_legi.arastirma_seviyesi.hedef == "mizrakcilar") || (oyuncular.ork_legi.arastirma_seviyesi.hedef == "tum_birimler"))) {
+            if((adim == 1) && ( strcmp(oyuncular.ork_legi.arastirma_seviyesi.baslik, "savunma_ustaligi") == 0) && (( (strcmp(oyuncular.ork_legi.arastirma_seviyesi.hedef, "mizrakcilar")) == 0) || ( strcmp(oyuncular.ork_legi.arastirma_seviyesi.hedef, "tum_birimler")) == 0)) {
                 mizrakcilar_savunma = mizrakcilar_savunma * (1 + (oyuncular.ork_legi.arastirma_seviyesi.deger / 100.0));
                 fprintf(savas, "%s ile %%%d savunma bonusu ile: %.f\n", oyuncular.ork_legi.arastirma_seviyesi.baslik, oyuncular.ork_legi.arastirma_seviyesi.deger, mizrakcilar_savunma);
 
@@ -1599,17 +1535,17 @@ int main(void) {
                 fprintf(savas, "(");
             }
 
-            if((adim == 1) && (oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_turu == "savunma") && ((oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_turu == "varg_binicileri") || (oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_turu == "tum_birimler"))) {
+            if((adim == 1) && ( (strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_turu, "savunma")) == 0) && (( strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_turu, "varg_binicileri") == 0) || ( strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_turu, "tum_birimler")) == 0)) {
                 varg_binicileri_savunma = varg_binicileri_savunma * (1 + (oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_degeri / 100.0));
                 fprintf(savas, "%s ile %%%d savunma bonusu ile: %.f\n", oyuncular.ork_legi.kahramanlar_ve_canavarlar.canavarlar, oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_degeri, varg_binicileri_savunma);
             }
 
-            if((adim == 1) && (oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.etki_turu == "savunma") && ((oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.etki_turu == "varg_binicileri") || (oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.etki_turu == "tum_birimler"))) {
+            if((adim == 1) && ( (strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.etki_turu, "savunma")) == 0) && (( strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.etki_turu, "varg_binicileri") == 0) || ( strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.etki_turu, "tum_birimler")) == 0)) {
                 varg_binicileri_savunma = varg_binicileri_savunma * (1 + (oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.etki_degeri / 100.0));
                 fprintf(savas, "%s ile %%%d savunma bonusu ile: %.f\n", oyuncular.ork_legi.kahramanlar_ve_canavarlar.kahramanlar, oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.etki_degeri, varg_binicileri_savunma);
             }
 
-            if((adim == 1) && (oyuncular.ork_legi.arastirma_seviyesi.baslik == "savunma_ustaligi") && ((oyuncular.ork_legi.arastirma_seviyesi.hedef == "varg_binicileri") || (oyuncular.ork_legi.arastirma_seviyesi.hedef == "tum_birimler"))) {
+            if((adim == 1) && ( strcmp(oyuncular.ork_legi.arastirma_seviyesi.baslik, "savunma_ustaligi") == 0) && (( strcmp(oyuncular.ork_legi.arastirma_seviyesi.hedef, "varg_binicileri") == 0) || ( strcmp(oyuncular.ork_legi.arastirma_seviyesi.hedef, "tum_birimler")) == 0)) {
                 varg_binicileri_savunma = varg_binicileri_savunma * (1 + (oyuncular.ork_legi.arastirma_seviyesi.deger / 100.0));
                 fprintf(savas, "%s ile %%%d savunma bonusu ile: %.f\n", oyuncular.ork_legi.arastirma_seviyesi.baslik, oyuncular.ork_legi.arastirma_seviyesi.deger, varg_binicileri_savunma);
 
@@ -1638,17 +1574,17 @@ int main(void) {
                 fprintf(savas, "(");
             }
 
-            if((adim == 1) && (oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_turu == "savunma") && ((oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_turu == "troller") || (oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_turu == "tum_birimler"))) {
+            if((adim == 1) && ( (strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_turu, "savunma")) == 0) && (( strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_turu, "troller") == 0) || ( strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_turu, "tum_birimler")) == 0)) {
                 troller_savunma = troller_savunma * (1 + (oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_degeri / 100.0));
                 fprintf(savas, "%s ile %%%d savunma bonusu ile: %.f\n", oyuncular.ork_legi.kahramanlar_ve_canavarlar.canavarlar, oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_degeri, troller_savunma);
             }
 
-            if((adim == 1) && (oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.etki_turu == "savunma") && ((oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.etki_turu == "troller") || (oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.etki_turu == "tum_birimler"))) {
+            if((adim == 1) && ( (strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.etki_turu, "savunma")) == 0) && (( strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.etki_turu, "troller") == 0) || ( strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.etki_turu, "tum_birimler")) == 0)) {
                 troller_savunma = troller_savunma * (1 + (oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.etki_degeri / 100.0));
                 fprintf(savas, "%s ile %%%d savunma bonusu ile: %.f\n", oyuncular.ork_legi.kahramanlar_ve_canavarlar.kahramanlar, oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.etki_degeri, troller_savunma);
             }
 
-            if((adim == 1) && (oyuncular.ork_legi.arastirma_seviyesi.baslik == "savunma_ustaligi") && ((oyuncular.ork_legi.arastirma_seviyesi.hedef == "troller") || (oyuncular.ork_legi.arastirma_seviyesi.hedef == "tum_birimler"))) {
+            if((adim == 1) && ( strcmp(oyuncular.ork_legi.arastirma_seviyesi.baslik, "savunma_ustaligi") == 0) && (( strcmp(oyuncular.ork_legi.arastirma_seviyesi.hedef, "troller") == 0) || ( strcmp(oyuncular.ork_legi.arastirma_seviyesi.hedef, "tum_birimler")) == 0)) {
                 troller_savunma = troller_savunma * (1 + (oyuncular.ork_legi.arastirma_seviyesi.deger / 100.0));
                 fprintf(savas, "%s ile %%%d savunma bonusu ile: %.f\n", oyuncular.ork_legi.arastirma_seviyesi.baslik, oyuncular.ork_legi.arastirma_seviyesi.deger, troller_savunma);
 
@@ -1727,16 +1663,18 @@ int main(void) {
 
 
 
-            if (adim != 1 && (adim % (int)ceil(pow((piyadeler_kritik_sans / 100.0), -1)) == 0)) {
+            if (adim != 1 && ((adim - 1) % (int)ceil(pow((piyadeler_kritik_sans / 100.0), -1)) == 0)) {
                 piyadeler_saldiri = piyadeler_saldiri / 1.5;
+                //printf("kritik piyadelr\n");
+                //printf("%d\n", adim);
             }
-            if (adim != 1 && (adim % (int)ceil(pow((okcular_kritik_sans / 100.0), -1)) == 0)) {
+            if (adim != 1 && ((adim - 1) % (int)ceil(pow((okcular_kritik_sans / 100.0), -1)) == 0)) {
                 okcular_saldiri = okcular_saldiri / 1.5;
             }
-            if (adim != 1 && (adim % (int)ceil(pow((suvariler_kritik_sans / 100.0), -1)) == 0)) {
+            if (adim != 1 && ((adim - 1) % (int)ceil(pow((suvariler_kritik_sans / 100.0), -1)) == 0)) {
                 suvariler_saldiri = suvariler_saldiri / 1.5;
             }
-            if (adim != 1 && (adim % (int)ceil(pow((kusatma_makineleri_kritik_sans / 100.0), -1)) == 0)) {
+            if (adim != 1 && ((adim - 1) % (int)ceil(pow((kusatma_makineleri_kritik_sans / 100.0), -1)) == 0)) {
                 kusatma_makineleri_saldiri = kusatma_makineleri_saldiri / 1.5;
             }
 
@@ -1806,51 +1744,92 @@ int main(void) {
                 if(adim == 2){
                     fprintf(savas, "(");
                 }
-            if((adim == 2) && (oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_turu == "saldiri") && ((oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.aciklama == "ork_dovusculeri") || (oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.aciklama == "tum_birimler"))) {
-            
+            if ((adim == 2) && 
+                (strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_turu, "saldiri") == 0) && 
+                ((strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.aciklama, "ork_dovusculeri") == 0) || 
+                 (strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.aciklama, "tum_birimler") == 0))) {
+                
                 ork_dovusculeri_saldiri = ork_dovusculeri_saldiri * (1 + (oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_degeri / 100.0)); 
-                fprintf(savas, "%s ile %%%d saldırı bonusu ile: %f ", oyuncular.ork_legi.kahramanlar_ve_canavarlar.canavarlar, oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_degeri, ork_dovusculeri_saldiri);
-
+                fprintf(savas, "%s ile %%%d saldırı bonusu ile: %f ", 
+                        oyuncular.ork_legi.kahramanlar_ve_canavarlar.canavarlar, 
+                        oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_degeri, 
+                        ork_dovusculeri_saldiri);
             }
-            if((adim == 2) && (oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.etki_turu == "saldiri") && ((oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.aciklama == "ork_dovusculeri") || (oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.aciklama == "tum_birimler"))) {
             
+            if ((adim == 2) && 
+                (strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.etki_turu, "saldiri") == 0) && 
+                ((strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.aciklama, "ork_dovusculeri") == 0) || 
+                 (strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.aciklama, "tum_birimler") == 0))) {
+                
                 ork_dovusculeri_saldiri = ork_dovusculeri_saldiri * (1 + (oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.etki_degeri / 100.0)); 
-                fprintf(savas, "%s ile %%%d saldırı bonusu ile: %f ", oyuncular.ork_legi.kahramanlar_ve_canavarlar.kahramanlar, oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_degeri, ork_dovusculeri_saldiri);
+                fprintf(savas, "%s ile %%%d saldırı bonusu ile: %f ", 
+                        oyuncular.ork_legi.kahramanlar_ve_canavarlar.kahramanlar, 
+                        oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.etki_degeri, 
+                        ork_dovusculeri_saldiri);
             }
-            if((adim == 2) && (oyuncular.ork_legi.arastirma_seviyesi.baslik == "saldiri_gelistirmesi") && ((oyuncular.ork_legi.arastirma_seviyesi.aciklama == "ork_dovusculeri") || (oyuncular.ork_legi.arastirma_seviyesi.aciklama == "tum_birimler"))) {
             
+            //printf("%s\n",oyuncular.ork_legi.arastirma_seviyesi.aciklama);
+            if ((adim == 2) && 
+                (strcmp(oyuncular.ork_legi.arastirma_seviyesi.baslik, "saldiri_gelistirmesi") == 0) && 
+                ((strcmp(oyuncular.ork_legi.arastirma_seviyesi.hedef, "ork_dovusculeri") == 0) || 
+                 (strcmp(oyuncular.ork_legi.arastirma_seviyesi.hedef, "tum_birimler") == 0))) {
+                    //printf("%s\n",oyuncular.ork_legi.arastirma_seviyesi.baslik);
+                
                 ork_dovusculeri_saldiri = ork_dovusculeri_saldiri * (1 + (oyuncular.ork_legi.arastirma_seviyesi.deger / 100.0));
-                fprintf(savas, "araştırmanın %%%d etkisi ile: %f", oyuncular.ork_legi.arastirma_seviyesi.deger, ork_dovusculeri_saldiri);
+                fprintf(savas, "Araştırmanın %%%d etkisi ile: %f", 
+                        oyuncular.ork_legi.arastirma_seviyesi.deger, 
+                        ork_dovusculeri_saldiri);
             }
-            if(adim == 2){
+            
+            if (adim == 2) {
                 fprintf(savas, ")\n");
             }
-            if((adim != 2) && ((adim - 2) % 10 )== 0){
-                fprintf(savas, "Yorgunluk nedeniyle tüm birimlerin saldırıları %%10 azaldı ork_dovusculeriin yeni saldırı gücü: %f\n", ork_dovusculeri_saldiri * 0.9);
+            
+            if ((adim != 2) && ((adim - 2) % 10) == 0) {
+                fprintf(savas, "Yorgunluk nedeniyle tüm birimlerin saldırıları %%10 azaldı. Ork dövüşçülerinin yeni saldırı gücü: %f\n", 
+                        ork_dovusculeri_saldiri * 0.9);
                 ork_dovusculeri_saldiri = ork_dovusculeri_saldiri * 0.9;
-
             }
-            if ( adim == 2) {
-                if((oyuncular.ork_legi.arastirma_seviyesi.baslik == "elit_egitim") && ((oyuncular.ork_legi.arastirma_seviyesi.aciklama == "ork_dovusculeri") || (oyuncular.ork_legi.arastirma_seviyesi.aciklama == "tum_birimler"))) {
-                    fprintf(savas, "Elit_egitim arastırmasının etkisi ile kritik şans: %%%d + %%%d = %%%d\n", ork_dovusculeri_kritik_sans, oyuncular.ork_legi.arastirma_seviyesi.deger, ork_dovusculeri_kritik_sans + oyuncular.ork_legi.arastirma_seviyesi.deger);
-                    ork_dovusculeri_kritik_sans = ork_dovusculeri_kritik_sans + oyuncular.ork_legi.arastirma_seviyesi.deger;
+            
+            if (adim == 2) {
+                if ((strcmp(oyuncular.ork_legi.arastirma_seviyesi.baslik, "elit_egitim") == 0) && ((strcmp(oyuncular.ork_legi.arastirma_seviyesi.hedef, "ork_dovusculeri") == 0) || (strcmp(oyuncular.ork_legi.arastirma_seviyesi.hedef, "tum_birimler") == 0))) {
+                    
+                    fprintf(savas, "Elit eğitim araştırmasının etkisi ile kritik şans: %%%d + %%%d = %%%d\n", 
+                            ork_dovusculeri_kritik_sans, 
+                            oyuncular.ork_legi.arastirma_seviyesi.deger, 
+                            ork_dovusculeri_kritik_sans + oyuncular.ork_legi.arastirma_seviyesi.deger);
+                    ork_dovusculeri_kritik_sans += oyuncular.ork_legi.arastirma_seviyesi.deger;
                 }
-                if((oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.etki_turu == "kritik_sans") && ((oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.aciklama == "ork_dovusculeri") || (oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.aciklama == "tum_birimler"))) {
-                    fprintf(savas, "%s etkisi ile kritik şans: %%%d + %%%d = %%%d\n", oyuncular.ork_legi.kahramanlar_ve_canavarlar.kahramanlar, ork_dovusculeri_kritik_sans, oyuncular.ork_legi.arastirma_seviyesi.deger, ork_dovusculeri_kritik_sans + oyuncular.ork_legi.arastirma_seviyesi.deger);
-                    ork_dovusculeri_kritik_sans = ork_dovusculeri_kritik_sans + oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.etki_degeri;
+            
+                if ((strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.etki_turu, "kritik_sans") == 0) && ((strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.aciklama, "ork_dovusculeri") == 0) || (strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.aciklama, "tum_birimler") == 0))) {
+                    
+                    fprintf(savas, "%s etkisi ile kritik şans: %%%d + %%%d = %%%d\n", 
+                            oyuncular.ork_legi.kahramanlar_ve_canavarlar.kahramanlar, 
+                            ork_dovusculeri_kritik_sans, 
+                            oyuncular.ork_legi.arastirma_seviyesi.deger, 
+                            ork_dovusculeri_kritik_sans + oyuncular.ork_legi.arastirma_seviyesi.deger);
+                    ork_dovusculeri_kritik_sans += oyuncular.ork_legi.arastirma_seviyesi.deger;
                 }
-                if((oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_turu == "kritik_sans") && ((oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.aciklama == "ork_dovusculeri") || (oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.aciklama == "tum_birimler"))) {
-                    fprintf(savas, "%s etkisi ile kritik şans: %%%d + %%%d = %%%d\n", oyuncular.ork_legi.kahramanlar_ve_canavarlar.canavarlar, ork_dovusculeri_kritik_sans, oyuncular.ork_legi.arastirma_seviyesi.deger, ork_dovusculeri_kritik_sans + oyuncular.ork_legi.arastirma_seviyesi.deger);
-                    ork_dovusculeri_kritik_sans = ork_dovusculeri_kritik_sans + oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_degeri;
+            
+                if ((strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_turu, "kritik_sans") == 0) && ((strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.aciklama, "ork_dovusculeri") == 0) || (strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.aciklama, "tum_birimler") == 0))) {
+                    
+                    fprintf(savas, "%s etkisi ile kritik şans: %%%d + %%%d = %%%d\n", 
+                            oyuncular.ork_legi.kahramanlar_ve_canavarlar.canavarlar, 
+                            ork_dovusculeri_kritik_sans, 
+                            oyuncular.ork_legi.arastirma_seviyesi.deger, 
+                            ork_dovusculeri_kritik_sans + oyuncular.ork_legi.arastirma_seviyesi.deger);
+                    ork_dovusculeri_kritik_sans += oyuncular.ork_legi.arastirma_seviyesi.deger;
                 }
-
-                fprintf(savas, "ork_dovusculeri kritik şans: %d\n", ork_dovusculeri_kritik_sans);
-
-                if (adim != 2 && (adim % (int)ceil(pow((ork_dovusculeri_kritik_sans / 100.0), -1)) == 0)) {
-                    ork_dovusculeri_saldiri = ork_dovusculeri_saldiri * 1.5;
-                    fprintf(savas, "ork_dovusculeriin saldırı gücü bu turda kritik hasar sayesinde %%50 arttı: %f\n", ork_dovusculeri_saldiri);
-                }
+            
+                fprintf(savas, "Ork dövüşçüleri kritik şans: %d\n", ork_dovusculeri_kritik_sans);
+            
+                
             }
+            if (adim != 2 && ((adim - 2) % (int)ceil(pow((ork_dovusculeri_kritik_sans / 100.0), -1)) == 0)) {
+                    ork_dovusculeri_saldiri *= 1.5;
+                    fprintf(savas, "Ork dövüşçülerinin saldırı gücü bu turda kritik hasar sayesinde %%50 arttı: %f\n", 
+                            ork_dovusculeri_saldiri);
+                }
 
         
 
@@ -1871,18 +1850,18 @@ int main(void) {
                 fprintf(savas, "(");
             }
 
-            if((adim == 2) && (oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_turu == "saldiri") && ((oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.aciklama == "mizrakcilar") || (oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.aciklama == "tum_birimler"))) {
+            if((adim == 2) && ( strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_turu, "saldiri") == 0) && (((strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.aciklama , "mizrakcilar")) == 0) || ( strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.aciklama, "tum_birimler")) == 0)) {
             
                 mizrakcilar_saldiri = mizrakcilar_saldiri * (1 + (oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_degeri / 100.0)); 
                 fprintf(savas, "%s ile %%%d saldırı bonusu ile: %.f ", oyuncular.ork_legi.kahramanlar_ve_canavarlar.canavarlar, oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_degeri, mizrakcilar_saldiri);
 
             }
-            if((adim == 2) && (oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.etki_turu == "saldiri") && ((oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.aciklama == "mizrakcilar") || (oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.aciklama == "tum_birimler"))) {
+            if((adim == 2) && ( strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.etki_turu, "saldiri") == 0) && (( (strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.aciklama, "mizrakcilar")) == 0) || ( strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.aciklama, "tum_birimler")) == 0)) {
             
                 mizrakcilar_saldiri = mizrakcilar_saldiri * (1 + (oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.etki_degeri / 100.0)); 
                 fprintf(savas, "%s ile %%%d saldırı bonusu ile: %.f ", oyuncular.ork_legi.kahramanlar_ve_canavarlar.kahramanlar, oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_degeri, mizrakcilar_saldiri);
             }
-            if((adim == 2) && (oyuncular.ork_legi.arastirma_seviyesi.baslik == "saldiri_gelistirmesi") && ((oyuncular.ork_legi.arastirma_seviyesi.aciklama == "mizrakcilar") || (oyuncular.ork_legi.arastirma_seviyesi.aciklama == "tum_birimler"))) {
+            if((adim == 2) && ( strcmp(oyuncular.ork_legi.arastirma_seviyesi.baslik, "saldiri_gelistirmesi") == 0) && (( (strcmp(oyuncular.ork_legi.arastirma_seviyesi.hedef, "mizrakcilar")) == 0) || ( strcmp(oyuncular.ork_legi.arastirma_seviyesi.hedef, "tum_birimler")) == 0)) {
             
                 mizrakcilar_saldiri = mizrakcilar_saldiri * (1 + (oyuncular.ork_legi.arastirma_seviyesi.deger / 100.0));
                 fprintf(savas, "araştırmanın %%%d etkisi ile: %.f", oyuncular.ork_legi.arastirma_seviyesi.deger, mizrakcilar_saldiri);
@@ -1897,27 +1876,28 @@ int main(void) {
 
             }
             if ( adim == 2) {
-                if((oyuncular.ork_legi.arastirma_seviyesi.baslik == "elit_egitim") && ((oyuncular.ork_legi.arastirma_seviyesi.aciklama == "mizrakcilar") || (oyuncular.ork_legi.arastirma_seviyesi.aciklama == "tum_birimler"))) {
+                if(( strcmp(oyuncular.ork_legi.arastirma_seviyesi.baslik, "elit_egitim") == 0) && (( (strcmp(oyuncular.ork_legi.arastirma_seviyesi.hedef, "mizrakcilar")) == 0) || ( strcmp(oyuncular.ork_legi.arastirma_seviyesi.hedef, "tum_birimler")) == 0)) {
                     fprintf(savas, "Elit_egitim arastırmasının etkisi ile kritik şans: %%%d + %%%d = %%%d\n", mizrakcilar_kritik_sans, oyuncular.ork_legi.arastirma_seviyesi.deger, mizrakcilar_kritik_sans + oyuncular.ork_legi.arastirma_seviyesi.deger);
                     mizrakcilar_kritik_sans = mizrakcilar_kritik_sans + oyuncular.ork_legi.arastirma_seviyesi.deger;
                 }
-                if((oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.etki_turu == "kritik_sans") && ((oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.aciklama == "mizrakcilar") || (oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.aciklama == "tum_birimler"))) {
+                if(( strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.etki_turu, "kritik_sans") == 0) && (( (strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.aciklama, "mizrakcilar")) == 0) || (strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.aciklama , "tum_birimler")) == 0)) {
                     fprintf(savas, "%s etkisi ile kritik şans: %%%d + %%%d = %%%d\n", oyuncular.ork_legi.kahramanlar_ve_canavarlar.kahramanlar, mizrakcilar_kritik_sans, oyuncular.ork_legi.arastirma_seviyesi.deger, mizrakcilar_kritik_sans + oyuncular.ork_legi.arastirma_seviyesi.deger);
                     mizrakcilar_kritik_sans = mizrakcilar_kritik_sans + oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.etki_degeri;
                 }
-                if((oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_turu == "kritik_sans") && ((oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.aciklama == "mizrakcilar") || (oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.aciklama == "tum_birimler"))) {
+                if(( strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_turu, "kritik_sans") == 0) && (( (strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.aciklama, "mizrakcilar")) == 0) || ( strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.aciklama, "tum_birimler")) == 0)) {
                     fprintf(savas, "%s etkisi ile kritik şans: %%%d + %%%d = %%%d\n", oyuncular.ork_legi.kahramanlar_ve_canavarlar.canavarlar, mizrakcilar_kritik_sans, oyuncular.ork_legi.arastirma_seviyesi.deger, mizrakcilar_kritik_sans + oyuncular.ork_legi.arastirma_seviyesi.deger);
                     mizrakcilar_kritik_sans = mizrakcilar_kritik_sans + oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_degeri;
                 }
 
                 fprintf(savas, "mizrakcilar kritik şans: %d\n", mizrakcilar_kritik_sans);
 
-                if (adim != 2 && (adim % (int)ceil(pow((mizrakcilar_kritik_sans / 100.0), -1)) == 0)) {
+                
+            }
+            if (adim != 2 && ((adim - 2) % (int)ceil(pow((mizrakcilar_kritik_sans / 100.0), -1)) == 0)) {
                     mizrakcilar_saldiri = mizrakcilar_saldiri * 1.5;
                     fprintf(savas, "mizrakcilarin saldırı gücü bu turda kritik hasar sayesinde %%50 arttı: %f\n", mizrakcilar_saldiri);
 
                 }
-            }
 
         }
         //varg_binicileri
@@ -1933,18 +1913,18 @@ int main(void) {
                 fprintf(savas, "(");
             }
 
-            if((adim == 2) && (oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_turu == "saldiri") && ((oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.aciklama == "varg_binicileri") || (oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.aciklama == "tum_birimler"))) {
+            if((adim == 2) && ( strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_turu, "saldiri") == 0) && (( strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.aciklama, "varg_binicileri")) || ( strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.aciklama, "tum_birimler")) == 0)) {
             
                 varg_binicileri_saldiri = varg_binicileri_saldiri * (1 + (oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_degeri / 100.0)); 
                 fprintf(savas, "%s ile %%%d saldırı bonusu ile: %.f ", oyuncular.ork_legi.kahramanlar_ve_canavarlar.canavarlar, oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_degeri, varg_binicileri_saldiri);
 
             }
-            if((adim == 2) && (oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.etki_turu == "saldiri") && ((oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.aciklama == "varg_binicileri") || (oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.aciklama == "tum_birimler"))) {
+            if((adim == 2) && ( strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.etki_turu, "saldiri") == 0) && (( strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.aciklama, "varg_binicileri")) || ( strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.aciklama, "tum_birimler")) == 0)) {
             
                 varg_binicileri_saldiri = varg_binicileri_saldiri * (1 + (oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.etki_degeri / 100.0)); 
                 fprintf(savas, "%s ile %%%d saldırı bonusu ile: %.f ", oyuncular.ork_legi.kahramanlar_ve_canavarlar.kahramanlar, oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_degeri, okcular_saldiri);
             }
-            if((adim == 2) && (oyuncular.ork_legi.arastirma_seviyesi.baslik == "saldiri_gelistirmesi") && ((oyuncular.ork_legi.arastirma_seviyesi.aciklama == "varg_binicileri") || (oyuncular.ork_legi.arastirma_seviyesi.aciklama == "tum_birimler"))) {
+            if((adim == 2) && ( strcmp(oyuncular.ork_legi.arastirma_seviyesi.baslik, "saldiri_gelistirmesi") == 0) && (( strcmp(oyuncular.ork_legi.arastirma_seviyesi.hedef, "varg_binicileri")) || ( strcmp(oyuncular.ork_legi.arastirma_seviyesi.hedef, "tum_birimler")) == 0)) {
             
                 varg_binicileri_saldiri = varg_binicileri_saldiri * (1 + (oyuncular.ork_legi.arastirma_seviyesi.deger / 100.0));
                 fprintf(savas, "araştırmanın %%%d etkisi ile: %.f", oyuncular.ork_legi.arastirma_seviyesi.deger, varg_binicileri_saldiri);
@@ -1961,26 +1941,27 @@ int main(void) {
 
             }
             if ( adim == 2) {
-                if((oyuncular.ork_legi.arastirma_seviyesi.baslik == "elit_egitim") && ((oyuncular.ork_legi.arastirma_seviyesi.aciklama == "varg_binicileri") || (oyuncular.ork_legi.arastirma_seviyesi.aciklama == "tum_birimler"))) {
+                if(( strcmp(oyuncular.ork_legi.arastirma_seviyesi.baslik, "elit_egitim") == 0) && (( strcmp(oyuncular.ork_legi.arastirma_seviyesi.hedef, "varg_binicileri") == 0) || ( strcmp(oyuncular.ork_legi.arastirma_seviyesi.hedef, "tum_birimler")) == 0)) {
                     fprintf(savas, "Elit_egitim arastırmasının etkisi ile kritik şans: %%%d + %%%d = %%%d\n", varg_binicileri_kritik_sans, oyuncular.ork_legi.arastirma_seviyesi.deger, varg_binicileri_kritik_sans + oyuncular.ork_legi.arastirma_seviyesi.deger);
                     varg_binicileri_kritik_sans = varg_binicileri_kritik_sans + oyuncular.ork_legi.arastirma_seviyesi.deger;
                 }
-                if((oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.etki_turu == "kritik_sans") && ((oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.aciklama == "varg_binicileri") || (oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.aciklama == "tum_birimler"))) {
+                if(( strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.etki_turu, "kritik_sans") == 0) && (( strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.aciklama, "varg_binicileri") == 0) || ( strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.aciklama, "tum_birimler")) == 0)) {
                     fprintf(savas, "%s etkisi ile kritik şans: %%%d + %%%d = %%%d\n", oyuncular.ork_legi.kahramanlar_ve_canavarlar.kahramanlar, varg_binicileri_kritik_sans, oyuncular.ork_legi.arastirma_seviyesi.deger, varg_binicileri_kritik_sans + oyuncular.ork_legi.arastirma_seviyesi.deger);
                     varg_binicileri_kritik_sans = varg_binicileri_kritik_sans + oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.etki_degeri;
                 }
-                if((oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_turu == "kritik_sans") && ((oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.aciklama == "varg_binicileri") || (oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.aciklama == "tum_birimler"))) {
+                if(( strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_turu, "kritik_sans") == 0) && (( strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.aciklama, "varg_binicileri") == 0) || ( strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.aciklama, "tum_birimler")) == 0)) {
                     fprintf(savas, "%s etkisi ile kritik şans: %%%d + %%%d = %%%d\n", oyuncular.ork_legi.kahramanlar_ve_canavarlar.canavarlar, varg_binicileri_kritik_sans, oyuncular.ork_legi.arastirma_seviyesi.deger, varg_binicileri_kritik_sans + oyuncular.ork_legi.arastirma_seviyesi.deger);
                     varg_binicileri_kritik_sans = varg_binicileri_kritik_sans + oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_degeri;
                 }
 
                 fprintf(savas, "varg_binicileri kritik şans: %d\n", varg_binicileri_kritik_sans);
 
-                if (adim != 1 && (adim % (int)ceil(pow((varg_binicileri_kritik_sans / 100.0), -1)) == 0)) {
+                
+            }
+            if (adim != 2 && ((adim - 2) % (int)ceil(pow((varg_binicileri_kritik_sans / 100.0), -1)) == 0)) {
                     varg_binicileri_saldiri = varg_binicileri_saldiri * 1.5;
                     fprintf(savas, "varg_binicileriin saldırı gücü bu turda kritik hasar sayesinde %%50 arttı: %f\n", varg_binicileri_saldiri);
                 }
-            }
 
         }
         //troller
@@ -1995,18 +1976,18 @@ int main(void) {
             if(adim == 2) {
                 fprintf(savas, "(");
             }
-            if((adim == 2) && (oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_turu == "saldiri") && ((oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.aciklama == "troller") || (oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.aciklama == "tum_birimler"))) {
+            if((adim == 2) && ( strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_turu, "saldiri") == 0) && ((strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.aciklama, "troller") == 0) || (strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.aciklama, "tum_birimler")) == 0)) {
             
                 troller_saldiri = troller_saldiri * (1 + (oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_degeri / 100.0)); 
                 fprintf(savas, "%s ile %%%d saldırı bonusu ile: %.f ", oyuncular.ork_legi.kahramanlar_ve_canavarlar.canavarlar, oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_degeri, troller_saldiri);
 
             }
-            if((adim == 2) && (oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.etki_turu == "saldiri") && ((oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.aciklama == "troller") || (oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.aciklama == "tum_birimler"))) {
+            if((adim == 2) && ( strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.etki_turu, "saldiri") == 0) && (( strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.aciklama, "troller") == 0) || ( strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.aciklama, "tum_birimler")) == 0)) {
             
                 troller_saldiri = troller_saldiri * (1 + (oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.etki_degeri / 100.0)); 
                 fprintf(savas, "%s ile %%%d saldırı bonusu ile: %.f ", oyuncular.ork_legi.kahramanlar_ve_canavarlar.kahramanlar, oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_degeri, troller_saldiri);
             }
-            if((adim == 2) && (oyuncular.ork_legi.arastirma_seviyesi.baslik == "saldiri_gelistirmesi") && ((oyuncular.ork_legi.arastirma_seviyesi.aciklama == "troller") || (oyuncular.ork_legi.arastirma_seviyesi.aciklama == "tum_birimler"))) {
+            if((adim == 2) && ( strcmp(oyuncular.ork_legi.arastirma_seviyesi.baslik, "saldiri_gelistirmesi") == 0) && (( strcmp(oyuncular.ork_legi.arastirma_seviyesi.hedef, "troller") == 0) || ( strcmp(oyuncular.ork_legi.arastirma_seviyesi.hedef, "tum_birimler")) == 0)) {
             
                 troller_saldiri = troller_saldiri * (1 + (oyuncular.ork_legi.arastirma_seviyesi.deger / 100.0));
                 fprintf(savas, "araştırmanın %%%d etkisi ile: %.f", oyuncular.ork_legi.arastirma_seviyesi.deger, troller_saldiri);
@@ -2020,15 +2001,15 @@ int main(void) {
 
             }
             if ( adim == 2) {
-                if((oyuncular.ork_legi.arastirma_seviyesi.baslik == "elit_egitim") && ((oyuncular.ork_legi.arastirma_seviyesi.aciklama == "troller") || (oyuncular.ork_legi.arastirma_seviyesi.aciklama == "tum_birimler"))) {
+                if(( strcmp(oyuncular.ork_legi.arastirma_seviyesi.baslik, "elit_egitim") == 0) && (( strcmp(oyuncular.ork_legi.arastirma_seviyesi.hedef, "troller") == 0) || ( strcmp(oyuncular.ork_legi.arastirma_seviyesi.hedef, "tum_birimler")) == 0)) {
                     fprintf(savas, "Elit_egitim araştırmasının etkisi ile kritik şans: %%%d + %%%d = %%%d\n", troller_kritik_sans, oyuncular.ork_legi.arastirma_seviyesi.deger, piyadeler_kritik_sans + oyuncular.ork_legi.arastirma_seviyesi.deger);
                     troller_kritik_sans = troller_kritik_sans + oyuncular.ork_legi.arastirma_seviyesi.deger;
                 }
-                if((oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.etki_turu == "kritik_sans") && ((oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.aciklama == "troller") || (oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.aciklama == "tum_birimler"))) {
+                if(( strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.etki_turu, "kritik_sans") == 0) && (( strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.aciklama, "troller") == 0) || ( strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.aciklama, "tum_birimler")) == 0)) {
                     fprintf(savas, "%s etkisi ile kritik şans: %%%d + %%%d = %%%d\n", oyuncular.ork_legi.kahramanlar_ve_canavarlar.kahramanlar, troller_kritik_sans, oyuncular.ork_legi.arastirma_seviyesi.deger, troller_kritik_sans + oyuncular.ork_legi.arastirma_seviyesi.deger);
                     troller_kritik_sans = troller_kritik_sans + oyuncular.ork_legi.kahramanlar_ve_canavarlar.ketkiler.etki_degeri;
                 }
-                if((oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_turu == "kritik_sans") && ((oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.aciklama == "troller") || (oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.aciklama == "tum_birimler"))) {
+                if(( strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_turu, "kritik_sans") == 0) && (( strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.aciklama, "troller") == 0) || ( strcmp(oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.aciklama, "tum_birimler")) == 0)) {
                     fprintf(savas, "%s etkisi ile kritik şans: %%%d + %%%d = %%%d\n", oyuncular.ork_legi.kahramanlar_ve_canavarlar.canavarlar, troller_kritik_sans, oyuncular.ork_legi.arastirma_seviyesi.deger, troller_kritik_sans + oyuncular.ork_legi.arastirma_seviyesi.deger);
                     troller_kritik_sans = troller_kritik_sans + oyuncular.ork_legi.kahramanlar_ve_canavarlar.cetkiler.etki_degeri;
                 }
@@ -2037,15 +2018,17 @@ int main(void) {
                 if(adim == 2) {
                     fprintf(savas, "(");
                 }
+                fprintf(savas, ")\n");
 
-                if (adim != 2 && (adim % (int)ceil(pow((troller_kritik_sans / 100.0), -1)) == 0)) {
+                
+            }
+            if (adim != 2 && ((adim - 2) % (int)ceil(pow((troller_kritik_sans / 100.0), -1)) == 0)) {
                     troller_saldiri = troller_saldiri * 1.5;
                     fprintf(savas, "trollernin saldırı gücü bu turda kritik hasar sayesinde %%50 arttı: %f\n", troller_saldiri);
                 }
-            }
             
 
-            fprintf(savas, ")\n");
+            //
 
         }
         
@@ -2064,17 +2047,17 @@ int main(void) {
                 fprintf(savas, "(");
             }
 
-            if((adim == 2) && (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_turu == "savunma") && ((oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_turu == "piyadeler") || (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_turu == "tum_birimler"))) {
+            if((adim == 2) && ( (strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_turu, "savunma")) == 0) && (( strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_turu, "piyadeler") == 0) || ( strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_turu, "tum_birimler")) == 0)) {
                 piyadeler_savunma = piyadeler_savunma * (1 + (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_degeri / 100.0));
                 fprintf(savas, "%s ile %%%d savunma bonusu ile: %.f\n", oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.canavarlar, oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_degeri, piyadeler_savunma);
             }
 
-            if((adim == 2) && (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_turu == "savunma") && ((oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_turu == "piyadeler") || (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_turu == "tum_birimler"))) {
+            if((adim == 2) && ( (strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_turu, "savunma")) == 0) && (( strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_turu, "piyadeler") == 0) || ( strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_turu, "tum_birimler")) == 0)) {
                 piyadeler_savunma = piyadeler_savunma * (1 + (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_degeri / 100.0));
                 fprintf(savas, "%s ile %%%d savunma bonusu ile: %.f\n", oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.kahramanlar, oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_degeri, piyadeler_savunma);
             }
 
-            if((adim == 2) && (oyuncular.insan_imparatorlugu.arastirma_seviyesi.baslik == "savunma_ustaligi") && ((oyuncular.insan_imparatorlugu.arastirma_seviyesi.hedef == "piyadeler") || (oyuncular.insan_imparatorlugu.arastirma_seviyesi.hedef == "tum_birimler"))) {
+            if((adim == 2) && ( strcmp(oyuncular.insan_imparatorlugu.arastirma_seviyesi.baslik, "savunma_ustaligi") == 0) && (( strcmp(oyuncular.insan_imparatorlugu.arastirma_seviyesi.hedef, "piyadeler") == 0) || ( strcmp(oyuncular.insan_imparatorlugu.arastirma_seviyesi.hedef, "tum_birimler")) == 0)) {
                 piyadeler_savunma = piyadeler_savunma * (1 + (oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger / 100.0));
                 fprintf(savas, "%s ile %%%d savunma bonusu ile: %.f\n", oyuncular.insan_imparatorlugu.arastirma_seviyesi.baslik, oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger, piyadeler_savunma);
 
@@ -2104,17 +2087,17 @@ int main(void) {
                 fprintf(savas, "(");
             }
 
-            if((adim == 2) && (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_turu == "savunma") && ((oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_turu == "okcular") || (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_turu == "tum_birimler"))) {
+            if((adim == 2) && ((strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_turu , "savunma")) == 0) && (( strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_turu, "okcular") == 0) || ( strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_turu, "tum_birimler")) == 0)) {
                 okcular_savunma = okcular_savunma * (1 + (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_degeri / 100.0));
                 fprintf(savas, "%s ile %%%d savunma bonusu ile: %.f\n", oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.canavarlar, oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_degeri, okcular_savunma);
             }
 
-            if((adim == 2) && (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_turu == "savunma") && ((oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_turu == "okcular") || (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_turu == "tum_birimler"))) {
+            if((adim == 2) && ( (strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_turu, "savunma")) == 0) && (( strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_turu, "okcular") == 0) || ( strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_turu, "tum_birimler")) == 0)) {
                 okcular_savunma = okcular_savunma * (1 + (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_degeri / 100.0));
                 fprintf(savas, "%s ile %%%d savunma bonusu ile: %.f\n", oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.kahramanlar, oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_degeri, okcular_savunma);
             }
 
-            if((adim == 2) && (oyuncular.insan_imparatorlugu.arastirma_seviyesi.baslik == "savunma_ustaligi") && ((oyuncular.insan_imparatorlugu.arastirma_seviyesi.hedef == "okcular") || (oyuncular.insan_imparatorlugu.arastirma_seviyesi.hedef == "tum_birimler"))) {
+            if((adim == 2) && ( strcmp(oyuncular.insan_imparatorlugu.arastirma_seviyesi.baslik, "savunma_ustaligi") == 0) && (( strcmp(oyuncular.insan_imparatorlugu.arastirma_seviyesi.hedef, "okcular") == 0) || ( strcmp(oyuncular.insan_imparatorlugu.arastirma_seviyesi.hedef, "tum_birimler")) == 0)) {
                 okcular_savunma = okcular_savunma * (1 + (oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger / 100.0));
                 fprintf(savas, "%s ile %%%d savunma bonusu ile: %.f\n", oyuncular.insan_imparatorlugu.arastirma_seviyesi.baslik, oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger, okcular_savunma);
 
@@ -2143,17 +2126,17 @@ int main(void) {
                 fprintf(savas, "(");
             }
 
-            if((adim == 2) && (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_turu == "savunma") && ((oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_turu == "suvariler") || (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_turu == "tum_birimler"))) {
+            if((adim == 2) && ( (strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_turu, "savunma")) == 0) && (( strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_turu, "suvariler") == 0) || ( strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_turu, "tum_birimler")) == 0)) {
                 suvariler_savunma = suvariler_savunma * (1 + (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_degeri / 100.0));
                 fprintf(savas, "%s ile %%%d savunma bonusu ile: %.f\n", oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.canavarlar, oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_degeri, suvariler_savunma);
             }
 
-            if((adim == 2) && (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_turu == "savunma") && ((oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_turu == "suvariler") || (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_turu == "tum_birimler"))) {
+            if((adim == 2) && ( (strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_turu, "savunma")) == 0) && (( strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_turu, "suvariler") == 0) || ( strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_turu, "tum_birimler")) == 0)) {
                 suvariler_savunma = suvariler_savunma * (1 + (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_degeri / 100.0));
                 fprintf(savas, "%s ile %%%d savunma bonusu ile: %.f\n", oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.kahramanlar, oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_degeri, suvariler_savunma);
             }
 
-            if((adim == 2) && (oyuncular.insan_imparatorlugu.arastirma_seviyesi.baslik == "savunma_ustaligi") && ((oyuncular.insan_imparatorlugu.arastirma_seviyesi.hedef == "suvariler") || (oyuncular.insan_imparatorlugu.arastirma_seviyesi.hedef == "tum_birimler"))) {
+            if((adim == 2) && ( strcmp(oyuncular.insan_imparatorlugu.arastirma_seviyesi.baslik, "savunma_ustaligi") == 0) && (( strcmp(oyuncular.insan_imparatorlugu.arastirma_seviyesi.hedef, "suvariler") == 0) || ( strcmp(oyuncular.insan_imparatorlugu.arastirma_seviyesi.hedef, "tum_birimler")) == 0)) {
                 suvariler_savunma = suvariler_savunma * (1 + (oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger / 100.0));
                 fprintf(savas, "%s ile %%%d savunma bonusu ile: %.f\n", oyuncular.insan_imparatorlugu.arastirma_seviyesi.baslik, oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger, suvariler_savunma);
 
@@ -2182,17 +2165,17 @@ int main(void) {
                 fprintf(savas, "(");
             }
 
-            if((adim == 2) && (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_turu == "savunma") && ((oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_turu == "kusatma_makineleri") || (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_turu == "tum_birimler"))) {
+            if((adim == 2) && ( (strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_turu, "savunma")) == 0) && (( strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_turu, "kusatma_makineleri") == 0) || ( strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_turu, "tum_birimler")) == 0)) {
                 kusatma_makineleri_savunma = kusatma_makineleri_savunma * (1 + (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_degeri / 100.0));
                 fprintf(savas, "%s ile %%%d savunma bonusu ile: %.f\n", oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.canavarlar, oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.cetkiler.etki_degeri, kusatma_makineleri_savunma);
             }
 
-            if((adim == 2) && (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_turu == "savunma") && ((oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_turu == "kusatma_makineleri") || (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_turu == "tum_birimler"))) {
+            if((adim == 2) && ( (strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_turu, "savunma")) == 0) && (( strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_turu, "kusatma_makineleri") == 0) || ( strcmp(oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_turu, "tum_birimler")) == 0)) {
                 kusatma_makineleri_savunma = kusatma_makineleri_savunma * (1 + (oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_degeri / 100.0));
                 fprintf(savas, "%s ile %%%d savunma bonusu ile: %.f\n", oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.kahramanlar, oyuncular.insan_imparatorlugu.kahramanlar_ve_canavarlar.ketkiler.etki_degeri, kusatma_makineleri_savunma);
             }
 
-            if((adim == 2) && (oyuncular.insan_imparatorlugu.arastirma_seviyesi.baslik == "savunma_ustaligi") && ((oyuncular.insan_imparatorlugu.arastirma_seviyesi.hedef == "kusatma_makineleri") || (oyuncular.insan_imparatorlugu.arastirma_seviyesi.hedef == "tum_birimler"))) {
+            if((adim == 2) && ( strcmp(oyuncular.insan_imparatorlugu.arastirma_seviyesi.baslik, "savunma_ustaligi") == 0) && (( strcmp(oyuncular.insan_imparatorlugu.arastirma_seviyesi.hedef, "kusatma_makineleri") == 0) || ( strcmp(oyuncular.insan_imparatorlugu.arastirma_seviyesi.hedef, "tum_birimler")) == 0)) {
                 kusatma_makineleri_savunma = kusatma_makineleri_savunma * (1 + (oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger / 100.0));
                 fprintf(savas, "%s ile %%%d savunma bonusu ile: %.f\n", oyuncular.insan_imparatorlugu.arastirma_seviyesi.baslik, oyuncular.insan_imparatorlugu.arastirma_seviyesi.deger, kusatma_makineleri_savunma);
 
@@ -2270,16 +2253,16 @@ int main(void) {
 
 
 
-            if (adim != 2 && (adim % (int)ceil(pow((ork_dovusculeri_kritik_sans / 100.0), -1)) == 0)) {
+            if (adim != 2 && ((adim - 2) % (int)ceil(pow((ork_dovusculeri_kritik_sans / 100.0), -1)) == 0)) {
                 ork_dovusculeri_saldiri = ork_dovusculeri_saldiri / 1.5;
             }
-            if (adim != 2 && (adim % (int)ceil(pow((mizrakcilar_kritik_sans / 100.0), -1)) == 0)) {
+            if (adim != 2 && ((adim - 2) % (int)ceil(pow((mizrakcilar_kritik_sans / 100.0), -1)) == 0)) {
                 mizrakcilar_saldiri = mizrakcilar_saldiri / 1.5;
             }
-            if (adim != 2 && (adim % (int)ceil(pow((troller_kritik_sans / 100.0), -1)) == 0)) {
+            if (adim != 2 && ((adim - 2) % (int)ceil(pow((troller_kritik_sans / 100.0), -1)) == 0)) {
                 troller_saldiri = troller_saldiri / 1.5;
             }
-            if (adim != 2 && (adim % (int)ceil(pow((varg_binicileri_kritik_sans / 100.0), -1)) == 0)) {
+            if (adim != 2 && ((adim - 2) % (int)ceil(pow((varg_binicileri_kritik_sans / 100.0), -1)) == 0)) {
                 varg_binicileri_saldiri = varg_binicileri_saldiri / 1.5;
             }
 
@@ -2365,7 +2348,6 @@ if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         return 1;
     }
 
-    // SDL_image kütüphanesinin başlatılması
     if (IMG_Init(IMG_INIT_JPG) == 0) {
         printf("SDL_image could not initialize! IMG_Error: %s\n", IMG_GetError());
         return 1;
@@ -2379,89 +2361,87 @@ if (SDL_Init(SDL_INIT_VIDEO) < 0) {
     }
 
     SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-    TTF_Font *font = TTF_OpenFont("Fonts/arial.ttf", 16); // Yazı tipi dosyasını doğru yol ile belirtin
+    TTF_Font *font = TTF_OpenFont("Fonts/arial.ttf", 16); 
     if (!font) {
         printf("Failed to load font! TTF_Error: %s\n", TTF_GetError());
         return 1;
     }
 
-    // Altıgen ızgarasının toplam genişliği ve yüksekliğini hesapla
     double hex_width = 1.5 * HEX_SIZE;
     double hex_height = sqrt(3) * HEX_SIZE;
     double grid_width = hex_width * 10;
     double grid_height = hex_height * 10;
 
-    // Altıgen ızgarasını ortalamak için başlangıç x ve y konumlarını hesapla
     int start_x = (SCREEN_WIDTH - grid_width) / 2;
     int start_y = (SCREEN_HEIGHT - grid_height) /2;
 
     Hex hexes[10][10];
-    SDL_Texture *okcular_texture = IMG_LoadTexture(renderer, "pictures/okcular.png"); // Dokuyu yükle
+    SDL_Texture *okcular_texture = IMG_LoadTexture(renderer, "pictures/okcular.png"); 
     if (!okcular_texture) {
         printf("Failed to load texture! IMG_Error: %s\n", IMG_GetError());
         return 1;
     }
-    SDL_Texture *piyadeler_texture = IMG_LoadTexture(renderer, "pictures/piyadeler.png"); // Dokuyu yükle
+    SDL_Texture *piyadeler_texture = IMG_LoadTexture(renderer, "pictures/piyadeler.png"); 
     if (!piyadeler_texture) {
         printf("Failed to load texture! IMG_Error: %s\n", IMG_GetError());
         return 1;
     }
-    SDL_Texture *suvariler_texture = IMG_LoadTexture(renderer, "pictures/suvariler.png"); // Dokuyu yükle
+    SDL_Texture *suvariler_texture = IMG_LoadTexture(renderer, "pictures/suvariler.png"); 
     if (!suvariler_texture) {
         printf("Failed to load texture! IMG_Error: %s\n", IMG_GetError());
         return 1;
     }
-    SDL_Texture *kusatma_makineleri_texture = IMG_LoadTexture(renderer, "pictures/kusatma_makineleri.png"); // Dokuyu yükle
+    SDL_Texture *kusatma_makineleri_texture = IMG_LoadTexture(renderer, "pictures/kusatma_makineleri.png"); 
     if (!kusatma_makineleri_texture) {
         printf("Failed to load texture! IMG_Error: %s\n", IMG_GetError());
         return 1;
     }
-    SDL_Texture *ork_dovusculeri_texture = IMG_LoadTexture(renderer, "pictures/ork_dovusculeri.png"); // Dokuyu yükle
+    SDL_Texture *ork_dovusculeri_texture = IMG_LoadTexture(renderer, "pictures/ork_dovusculeri.png"); 
     if (!ork_dovusculeri_texture) {
         printf("Failed to load texture! IMG_Error: %s\n", IMG_GetError());
         return 1;
     }
-    SDL_Texture *mizrakcilar_texture = IMG_LoadTexture(renderer, "pictures/mizrakcilar.png"); // Dokuyu yükle
+    SDL_Texture *mizrakcilar_texture = IMG_LoadTexture(renderer, "pictures/mizrakcilar.png"); 
     if (!mizrakcilar_texture) {
         printf("Failed to load texture! IMG_Error: %s\n", IMG_GetError());
         return 1;
     }
-    SDL_Texture *varg_binicileri_texture = IMG_LoadTexture(renderer, "pictures/varg_binicileri.png"); // Dokuyu yükle
+    SDL_Texture *varg_binicileri_texture = IMG_LoadTexture(renderer, "pictures/varg_binicileri.png"); 
     if (!varg_binicileri_texture) {
         printf("Failed to load texture! IMG_Error: %s\n", IMG_GetError());
         return 1;
     }
-    SDL_Texture *troller_texture = IMG_LoadTexture(renderer, "pictures/troller.png"); // Dokuyu yükle
+    SDL_Texture *troller_texture = IMG_LoadTexture(renderer, "pictures/troller.png"); 
     if (!troller_texture) {
         printf("Failed to load texture! IMG_Error: %s\n", IMG_GetError());
         return 1;
     }
-    SDL_Texture *bos_texture = IMG_LoadTexture(renderer, "pictures/bos.png"); // Dokuyu yükle
+    SDL_Texture *bos_texture = IMG_LoadTexture(renderer, "pictures/bos.png"); 
     if (!troller_texture) {
         printf("Failed to load texture! IMG_Error: %s\n", IMG_GetError());
         return 1;
     }
-    SDL_Texture *background_texture = IMG_LoadTexture(renderer, "pictures/back_ground.png"); // Arka plan resmini yükleyin
+    SDL_Texture *background_texture = IMG_LoadTexture(renderer, "pictures/back_ground.png"); 
 if (!background_texture) {
     printf("Failed to load background texture! IMG_Error: %s\n", IMG_GetError());
     return 1;
 }
-    SDL_Texture *insanlar_kahraman_texture = IMG_LoadTexture(renderer, "pictures/insanlar_kahraman.png"); // Arka plan resmini yükleyin
+    SDL_Texture *insanlar_kahraman_texture = IMG_LoadTexture(renderer, "pictures/insanlar_kahraman.png"); 
 if (!background_texture) {
     printf("Failed to load background texture! IMG_Error: %s\n", IMG_GetError());
     return 1;
 }
-    SDL_Texture *insanlar_canavar_texture = IMG_LoadTexture(renderer, "pictures/insanlar_canavar.png"); // Arka plan resmini yükleyin
+    SDL_Texture *insanlar_canavar_texture = IMG_LoadTexture(renderer, "pictures/insanlar_canavar.png"); 
 if (!background_texture) {
     printf("Failed to load background texture! IMG_Error: %s\n", IMG_GetError());
     return 1;
 }
-    SDL_Texture *orklar_kahraman_texture = IMG_LoadTexture(renderer, "pictures/orklar_kahraman.png"); // Arka plan resmini yükleyin
+    SDL_Texture *orklar_kahraman_texture = IMG_LoadTexture(renderer, "pictures/orklar_kahraman.png"); 
 if (!background_texture) {
     printf("Failed to load background texture! IMG_Error: %s\n", IMG_GetError());
     return 1;
 }
-    SDL_Texture *orklar_canavar_texture = IMG_LoadTexture(renderer, "pictures/orklar_canavar.png"); // Arka plan resmini yükleyin
+    SDL_Texture *orklar_canavar_texture = IMG_LoadTexture(renderer, "pictures/orklar_canavar.png"); 
 if (!background_texture) {
     printf("Failed to load background texture! IMG_Error: %s\n", IMG_GetError());
     return 1;
@@ -2477,17 +2457,12 @@ if (!background_texture) {
             hexes[a][b].y = start_y + a * hex_height + (b % 2) * (HEX_SIZE * sqrt(3) / 2);
             hexes[a][b].health = 0;
             hexes[a][b].units = 0;
-            hexes[a][b].texture = bos_texture; // Dokuyu atama
+            hexes[a][b].texture = bos_texture; 
                     
         }
     }       
-    //hexes[0][0].texture = insanlar_kahraman_texture;
-    //hexes[0][1].texture = insanlar_canavar_texture;
-    //hexes[9][8].texture = orklar_kahraman_texture;
-    //hexes[9][9].texture = orklar_canavar_texture;
 
 
-    //initializeHexes(hexes, start_x, start_y, hex_height, okcular_texture);
     for (int i = 0; i < 10; i++) {        
         for (int j = 0; j < 10; j++) {
             if(i == 0 && j == 0) {
@@ -2500,21 +2475,17 @@ if (!background_texture) {
             }
             else if((piyadeler_sayig > 0) && (piyadeler_sayig > 100)) {
                 
-                    //hexes[i][j].x = start_x + j * 1.5 * HEX_SIZE;
-                    //hexes[i][j].y = start_y + i * hex_height + (j % 2) * (HEX_SIZE * sqrt(3) / 2);
                     hexes[j][i].health = piyadeler_saglik / piyadeler_saglik;
                     hexes[j][i].units = 100;
-                    hexes[j][i].texture = piyadeler_texture; // Dokuyu atama
+                    hexes[j][i].texture = piyadeler_texture; 
 
                     piyadeler_sayig -= 100;
                 
             }
             else if((piyadeler_sayig > 0) && (piyadeler_sayig <= 100)) {
-                //hexes[i][j].x = start_x + j * 1.5 * HEX_SIZE;
-                    //hexes[i][j].y = start_y + i * hex_height + (j % 2) * (HEX_SIZE * sqrt(3) / 2);
                     hexes[j][i].health = piyadeler_saglik / piyadeler_saglik;
                     hexes[j][i].units = piyadeler_sayig;
-                    hexes[j][i].texture = piyadeler_texture; // Dokuyu atama
+                    hexes[j][i].texture = piyadeler_texture; 
 
                     piyadeler_sayig -= piyadeler_sayig;
                     continue;
@@ -2523,22 +2494,18 @@ if (!background_texture) {
             else if((okcular_sayig > 0) && (okcular_sayig > 100)) {
                 
                 
-                    //hexes[i][j].x = start_x + j * 1.5 * HEX_SIZE;
-                    //hexes[i][j].y = start_y + i * hex_height + (j % 2) * (HEX_SIZE * sqrt(3) / 2);
                     hexes[j][i].health = okcular_saglik / okcular_saglik;
                     hexes[j][i].units = 100;
-                    hexes[j][i].texture = okcular_texture; // Dokuyu atama
+                    hexes[j][i].texture = okcular_texture; 
 
                     okcular_sayig -= 100;
                 
             }
             else if((okcular_sayig > 0) && (okcular_sayig <= 100)) {
                 
-                //hexes[i][j].x = start_x + j * 1.5 * HEX_SIZE;
-                    //hexes[i][j].y = start_y + i * hex_height + (j % 2) * (HEX_SIZE * sqrt(3) / 2);
                     hexes[j][i].health = okcular_saglik / okcular_saglik;
                     hexes[j][i].units = okcular_sayig;
-                    hexes[j][i].texture = okcular_texture; // Dokuyu atama
+                    hexes[j][i].texture = okcular_texture; 
 
                     okcular_sayig -= okcular_sayig;
                     continue;
@@ -2547,22 +2514,18 @@ if (!background_texture) {
             else if((suvariler_sayig > 0) && (suvariler_sayig > 100)) {
                     
                     
-                    //hexes[i][j].x = start_x + j * 1.5 * HEX_SIZE;
-                    //hexes[i][j].y = start_y + i * hex_height + (j % 2) * (HEX_SIZE * sqrt(3) / 2);
                     hexes[j][i].health = 1;
                     hexes[j][i].units = 100;
-                    hexes[j][i].texture = suvariler_texture; // Dokuyu atama
+                    hexes[j][i].texture = suvariler_texture; 
 
                     suvariler_sayig -= 100;
                 
             }
             else if((suvariler_sayig > 0) && (suvariler_sayig <= 100)) {
                 
-                //hexes[i][j].x = start_x + j * 1.5 * HEX_SIZE;
-                    //hexes[i][j].y = start_y + i * hex_height + (j % 2) * (HEX_SIZE * sqrt(3) / 2);
                     hexes[j][i].health = 1;
                     hexes[j][i].units = suvariler_sayig;
-                    hexes[j][i].texture = suvariler_texture; // Dokuyu atama
+                    hexes[j][i].texture = suvariler_texture; 
 
                     suvariler_sayig -= suvariler_sayig;
                     continue;
@@ -2571,22 +2534,18 @@ if (!background_texture) {
             else if((kusatma_makineleri_sayig > 0) && (kusatma_makineleri_sayig > 100)) {
                 
                 
-                    //hexes[i][j].x = start_x + j * 1.5 * HEX_SIZE;
-                    //hexes[i][j].y = start_y + i * hex_height + (j % 2) * (HEX_SIZE * sqrt(3) / 2);
                     hexes[j][i].health = kusatma_makineleri_saglik / kusatma_makineleri_saglik;
                     hexes[j][i].units = 100;
-                    hexes[j][i].texture = kusatma_makineleri_texture; // Dokuyu atama
+                    hexes[j][i].texture = kusatma_makineleri_texture; 
 
                     kusatma_makineleri_sayig -= 100;
                 
             }
             else if((kusatma_makineleri_sayig > 0) && (kusatma_makineleri_sayig <= 100)) {
                 
-                //hexes[i][j].x = start_x + j * 1.5 * HEX_SIZE;
-                    //hexes[i][j].y = start_y + i * hex_height + (j % 2) * (HEX_SIZE * sqrt(3) / 2);
                     hexes[j][i].health = kusatma_makineleri_saglik / kusatma_makineleri_saglik;
                     hexes[j][i].units = kusatma_makineleri_sayig;
-                    hexes[j][i].texture = kusatma_makineleri_texture; // Dokuyu atama
+                    hexes[j][i].texture = kusatma_makineleri_texture; 
 
                     kusatma_makineleri_sayig -= kusatma_makineleri_sayig;
                     continue;
@@ -2594,7 +2553,6 @@ if (!background_texture) {
             }
             
                 
-            // Sağlık çubuğunu çizme fonksiyonu çağrısı
             
         }
         
@@ -2613,22 +2571,18 @@ if (!background_texture) {
             else if((ork_dovusculeri_sayig > 0) && (ork_dovusculeri_sayig > 100)) {
 
                 
-                    //hexes[i][j].x = start_x + j * 1.5 * HEX_SIZE;
-                    //hexes[i][j].y = start_y + i * hex_height + (j % 2) * (HEX_SIZE * sqrt(3) / 2);
                     hexes[n][m].health = ork_dovusculeri_saglik / ork_dovusculeri_saglik;
                     hexes[n][m].units = 100;
-                    hexes[n][m].texture = ork_dovusculeri_texture; // Dokuyu atama
+                    hexes[n][m].texture = ork_dovusculeri_texture; 
 
                     ork_dovusculeri_sayig -= 100;
                 
             }
             else if((ork_dovusculeri_sayig > 0) && (ork_dovusculeri_sayig <= 100)) {
                 
-                //hexes[i][j].x = start_x + j * 1.5 * HEX_SIZE;
-                    //hexes[i][j].y = start_y + i * hex_height + (j % 2) * (HEX_SIZE * sqrt(3) / 2);
                     hexes[n][m].health = ork_dovusculeri_saglik / ork_dovusculeri_saglik;
                     hexes[n][m].units = ork_dovusculeri_sayig;
-                    hexes[n][m].texture = ork_dovusculeri_texture; // Dokuyu atama
+                    hexes[n][m].texture = ork_dovusculeri_texture; 
 
                     ork_dovusculeri_sayig -= ork_dovusculeri_sayig;
                     
@@ -2637,22 +2591,18 @@ if (!background_texture) {
             else if((mizrakcilar_sayig > 0) && (mizrakcilar_sayig > 100)) {
                 
                 
-                    //hexes[i][j].x = start_x + j * 1.5 * HEX_SIZE;
-                    //hexes[i][j].y = start_y + i * hex_height + (j % 2) * (HEX_SIZE * sqrt(3) / 2);
                     hexes[n][m].health = mizrakcilar_saglik / mizrakcilar_saglik;
                     hexes[n][m].units = 100;
-                    hexes[n][m].texture = mizrakcilar_texture; // Dokuyu atama
+                    hexes[n][m].texture = mizrakcilar_texture; 
 
                     mizrakcilar_sayig -= 100;
                 
             }
             else if((mizrakcilar_sayig > 0) && (mizrakcilar_sayig <= 100)) {
                 
-                //hexes[i][j].x = start_x + j * 1.5 * HEX_SIZE;
-                    //hexes[i][j].y = start_y + i * hex_height + (j % 2) * (HEX_SIZE * sqrt(3) / 2);
                     hexes[n][m].health = mizrakcilar_saglik / mizrakcilar_saglik;
                     hexes[n][m].units = mizrakcilar_sayig;
-                    hexes[n][m].texture = mizrakcilar_texture; // Dokuyu atama
+                    hexes[n][m].texture = mizrakcilar_texture; 
 
                     mizrakcilar_sayig -= mizrakcilar_sayig;
                     
@@ -2661,22 +2611,18 @@ if (!background_texture) {
             else if((varg_binicileri_sayig > 0) && (varg_binicileri_sayig > 100)) {
                 
                 
-                    //hexes[i][j].x = start_x + j * 1.5 * HEX_SIZE;
-                    //hexes[i][j].y = start_y + i * hex_height + (j % 2) * (HEX_SIZE * sqrt(3) / 2);
                     hexes[n][m].health = 1;
                     hexes[n][m].units = 100;
-                    hexes[n][m].texture = varg_binicileri_texture; // Dokuyu atama
+                    hexes[n][m].texture = varg_binicileri_texture; 
 
                     varg_binicileri_sayig -= 100;
                 
             }
             else if((varg_binicileri_sayig > 0) && (varg_binicileri_sayig <= 100)) {
                 
-                //hexes[i][j].x = start_x + j * 1.5 * HEX_SIZE;
-                    //hexes[i][j].y = start_y + i * hex_height + (j % 2) * (HEX_SIZE * sqrt(3) / 2);
                     hexes[n][m].health = 1;
                     hexes[n][m].units = varg_binicileri_sayig;
-                    hexes[n][m].texture = varg_binicileri_texture; // Dokuyu atama
+                    hexes[n][m].texture = varg_binicileri_texture; 
 
                     varg_binicileri_sayig -= varg_binicileri_sayig;
 
@@ -2685,22 +2631,18 @@ if (!background_texture) {
             else if((troller_sayig > 0) && (troller_sayig > 100)) {
                 
                 
-                    //hexes[i][j].x = start_x + j * 1.5 * HEX_SIZE;
-                    //hexes[i][j].y = start_y + i * hex_height + (j % 2) * (HEX_SIZE * sqrt(3) / 2);
                     hexes[n][m].health = troller_saglik / troller_saglik;
                     hexes[n][m].units = 100;
-                    hexes[n][m].texture = troller_texture; // Dokuyu atama
+                    hexes[n][m].texture = troller_texture; 
 
                     troller_sayig -= 100;
                 
             }
             else if((troller_sayig > 0) && (troller_sayig <= 100)) {
                 
-                //hexes[i][j].x = start_x + j * 1.5 * HEX_SIZE;
-                    //hexes[i][j].y = start_y + i * hex_height + (j % 2) * (HEX_SIZE * sqrt(3) / 2);
                     hexes[n][m].health = troller_saglik / troller_saglik;
                     hexes[n][m].units = troller_sayig;
-                    hexes[n][m].texture = troller_texture; // Dokuyu atama
+                    hexes[n][m].texture = troller_texture; 
 
                     troller_sayig -= troller_sayig;
 
@@ -2741,25 +2683,18 @@ if (!background_texture) {
         }
         if (e.type == SDL_KEYDOWN) {
             switch (e.key.keysym.sym) {
-                case SDLK_r: // "R" tuşuna basıldığında
-                    // Yeni rastgele değerler vererek hexagonları yeniden doldur
+                case SDLK_r: //r
                     for(int a = 0; a < 10; a++) {
                         for(int b = 0; b < 10; b++) {
                             hexes[a][b].x = start_x + b * 1.5 * HEX_SIZE;
                             hexes[a][b].y = start_y + a * hex_height + (b % 2) * (HEX_SIZE * sqrt(3) / 2);
                             hexes[a][b].health = 0;
                             hexes[a][b].units = 0;
-                            hexes[a][b].texture = bos_texture; // Dokuyu atama
+                            hexes[a][b].texture = bos_texture; 
 
                         }
                     }       
-                //hexes[0][0].texture = insanlar_kahraman_texture;
-                //hexes[0][1].texture = insanlar_canavar_texture;
-                //hexes[9][8].texture = orklar_kahraman_texture;
-                //hexes[9][9].texture = orklar_canavar_texture;
 
-
-                //initializeHexes(hexes, start_x, start_y, hex_height, okcular_texture);
                     for (int i = 0; i < 10; i++) {        
                         for (int j = 0; j < 10; j++) {
                             if(i == 0 && j == 0) {
@@ -2772,21 +2707,17 @@ if (!background_texture) {
                             }
                             else if((piyadeler_sayi > 0) && (piyadeler_sayi > 100)) {
 
-                                    //hexes[i][j].x = start_x + j * 1.5 * HEX_SIZE;
-                                    //hexes[i][j].y = start_y + i * hex_height + (j % 2) * (HEX_SIZE * sqrt(3) / 2);
                                     hexes[j][i].health = piyadeler_sonra / piyadeler_once;
                                     hexes[j][i].units = 100;
-                                    hexes[j][i].texture = piyadeler_texture; // Dokuyu atama
+                                    hexes[j][i].texture = piyadeler_texture; 
 
                                     piyadeler_sayi -= 100;
 
                             }
                             else if((piyadeler_sayi > 0) && (piyadeler_sayi <= 100)) { 
-                                //hexes[i][j].x = start_x + j * 1.5 * HEX_SIZE;
-                                    //hexes[i][j].y = start_y + i * hex_height + (j % 2) * (HEX_SIZE * sqrt(3) / 2);
                                     hexes[j][i].health = piyadeler_sonra / piyadeler_once;
                                     hexes[j][i].units = piyadeler_sayi;
-                                    hexes[j][i].texture = piyadeler_texture; // Dokuyu atama
+                                    hexes[j][i].texture = piyadeler_texture; 
 
                                     piyadeler_sayi -= piyadeler_sayi;
                                     continue;
@@ -2795,22 +2726,18 @@ if (!background_texture) {
                             else if((okcular_sayi > 0) && (okcular_sayi > 100)) {
 
 
-                                    //hexes[i][j].x = start_x + j * 1.5 * HEX_SIZE;
-                                    //hexes[i][j].y = start_y + i * hex_height + (j % 2) * (HEX_SIZE * sqrt(3) / 2);
                                     hexes[j][i].health = okcular_sonra / okcular_once;
                                     hexes[j][i].units = 100;
-                                    hexes[j][i].texture = okcular_texture; // Dokuyu atama
+                                    hexes[j][i].texture = okcular_texture; 
 
                                     okcular_sayi -= 100;
 
                             }
                             else if((okcular_sayi > 0) && (okcular_sayi <= 100)) {
 
-                                //hexes[i][j].x = start_x + j * 1.5 * HEX_SIZE;
-                                    //hexes[i][j].y = start_y + i * hex_height + (j % 2) * (HEX_SIZE * sqrt(3) / 2);
                                     hexes[j][i].health = okcular_sonra / okcular_once;
                                     hexes[j][i].units = okcular_sayi;
-                                    hexes[j][i].texture = okcular_texture; // Dokuyu atama
+                                    hexes[j][i].texture = okcular_texture; 
 
                                     okcular_sayi -= okcular_sayi;
                                     continue;
@@ -2819,22 +2746,18 @@ if (!background_texture) {
                             else if((suvariler_sayi > 0) && (suvariler_sayi > 100)) {
 
 
-                                    //hexes[i][j].x = start_x + j * 1.5 * HEX_SIZE;
-                                    //hexes[i][j].y = start_y + i * hex_height + (j % 2) * (HEX_SIZE * sqrt(3) / 2);
                                     hexes[j][i].health = suvariler_sonra / suvariler_once;
                                     hexes[j][i].units = 100;
-                                    hexes[j][i].texture = suvariler_texture; // Dokuyu atama
+                                    hexes[j][i].texture = suvariler_texture; 
 
                                     suvariler_sayi -= 100;
 
                             }
                             else if((suvariler_sayi > 0) && (suvariler_sayi <= 100)) {
 
-                                //hexes[i][j].x = start_x + j * 1.5 * HEX_SIZE;
-                                    //hexes[i][j].y = start_y + i * hex_height + (j % 2) * (HEX_SIZE * sqrt(3) / 2);
                                     hexes[j][i].health = suvariler_sonra / suvariler_once;
                                     hexes[j][i].units = suvariler_sayi;
-                                    hexes[j][i].texture = suvariler_texture; // Dokuyu atama
+                                    hexes[j][i].texture = suvariler_texture; 
 
                                     suvariler_sayi -= suvariler_sayi;
                                     continue;
@@ -2843,22 +2766,18 @@ if (!background_texture) {
                             else if((kusatma_makineleri_sayi > 0) && (kusatma_makineleri_sayi > 100)) {
 
 
-                                    //hexes[i][j].x = start_x + j * 1.5 * HEX_SIZE;
-                                    //hexes[i][j].y = start_y + i * hex_height + (j % 2) * (HEX_SIZE * sqrt(3) / 2);
                                     hexes[j][i].health = kusatma_makineleri_sonra / kusatma_makineleri_once;
                                     hexes[j][i].units = 100;
-                                    hexes[j][i].texture = kusatma_makineleri_texture; // Dokuyu atama
+                                    hexes[j][i].texture = kusatma_makineleri_texture; 
 
                                     kusatma_makineleri_sayi -= 100;
 
                             }
                             else if((kusatma_makineleri_sayi > 0) && (kusatma_makineleri_sayi <= 100)) {
 
-                                //hexes[i][j].x = start_x + j * 1.5 * HEX_SIZE;
-                                    //hexes[i][j].y = start_y + i * hex_height + (j % 2) * (HEX_SIZE * sqrt(3) / 2);
                                     hexes[j][i].health = kusatma_makineleri_sonra / kusatma_makineleri_once;
                                     hexes[j][i].units = kusatma_makineleri_sayi;
-                                    hexes[j][i].texture = kusatma_makineleri_texture; // Dokuyu atama
+                                    hexes[j][i].texture = kusatma_makineleri_texture; 
 
                                     kusatma_makineleri_sayi -= kusatma_makineleri_sayi;
                                     continue;
@@ -2882,22 +2801,18 @@ if (!background_texture) {
                             else if((ork_dovusculeri_sayi > 0) && (ork_dovusculeri_sayi > 100)) {
                             
 
-                                    //hexes[i][j].x = start_x + j * 1.5 * HEX_SIZE;
-                                    //hexes[i][j].y = start_y + i * hex_height + (j % 2) * (HEX_SIZE * sqrt(3) / 2);
                                     hexes[n][m].health = ork_dovusculeri_sonra / ork_dovusculeri_once;
                                     hexes[n][m].units = 100;
-                                    hexes[n][m].texture = ork_dovusculeri_texture; // Dokuyu atama
+                                    hexes[n][m].texture = ork_dovusculeri_texture; 
 
                                     ork_dovusculeri_sayi -= 100;
 
                             }
                             else if((ork_dovusculeri_sayi > 0) && (ork_dovusculeri_sayi <= 100)) {
 
-                                //hexes[i][j].x = start_x + j * 1.5 * HEX_SIZE;
-                                    //hexes[i][j].y = start_y + i * hex_height + (j % 2) * (HEX_SIZE * sqrt(3) / 2);
                                     hexes[n][m].health = ork_dovusculeri_sonra / ork_dovusculeri_once;
                                     hexes[n][m].units = ork_dovusculeri_sayi;
-                                    hexes[n][m].texture = ork_dovusculeri_texture; // Dokuyu atama
+                                    hexes[n][m].texture = ork_dovusculeri_texture; 
 
                                     ork_dovusculeri_sayi -= ork_dovusculeri_sayi;
 
@@ -2906,22 +2821,18 @@ if (!background_texture) {
                             else if((mizrakcilar_sayi > 0) && (mizrakcilar_sayi > 100)) {
 
 
-                                    //hexes[i][j].x = start_x + j * 1.5 * HEX_SIZE;
-                                    //hexes[i][j].y = start_y + i * hex_height + (j % 2) * (HEX_SIZE * sqrt(3) / 2);
                                     hexes[n][m].health = mizrakcilar_sonra / mizrakcilar_once;
                                     hexes[n][m].units = 100;
-                                    hexes[n][m].texture = mizrakcilar_texture; // Dokuyu atama
+                                    hexes[n][m].texture = mizrakcilar_texture; 
 
                                     mizrakcilar_sayi -= 100;
 
                             }
                             else if((mizrakcilar_sayi > 0) && (mizrakcilar_sayi <= 100)) {
 
-                                //hexes[i][j].x = start_x + j * 1.5 * HEX_SIZE;
-                                    //hexes[i][j].y = start_y + i * hex_height + (j % 2) * (HEX_SIZE * sqrt(3) / 2);
                                     hexes[n][m].health = mizrakcilar_sonra / mizrakcilar_once;
                                     hexes[n][m].units = mizrakcilar_sayi;
-                                    hexes[n][m].texture = mizrakcilar_texture; // Dokuyu atama
+                                    hexes[n][m].texture = mizrakcilar_texture; 
 
                                     mizrakcilar_sayi -= mizrakcilar_sayi;
 
@@ -2930,22 +2841,18 @@ if (!background_texture) {
                             else if((varg_binicileri_sayi > 0) && (varg_binicileri_sayi > 100)) {
 
 
-                                    //hexes[i][j].x = start_x + j * 1.5 * HEX_SIZE;
-                                    //hexes[i][j].y = start_y + i * hex_height + (j % 2) * (HEX_SIZE * sqrt(3) / 2);
                                     hexes[n][m].health = varg_binicileri_sonra / varg_binicileri_once;
                                     hexes[n][m].units = 100;
-                                    hexes[n][m].texture = varg_binicileri_texture; // Dokuyu atama
+                                    hexes[n][m].texture = varg_binicileri_texture; 
 
                                     varg_binicileri_sayi -= 100;
 
                             }
                             else if((varg_binicileri_sayi > 0) && (varg_binicileri_sayi <= 100)) {
 
-                                //hexes[i][j].x = start_x + j * 1.5 * HEX_SIZE;
-                                    //hexes[i][j].y = start_y + i * hex_height + (j % 2) * (HEX_SIZE * sqrt(3) / 2);
                                     hexes[n][m].health = varg_binicileri_sonra / varg_binicileri_once;
                                     hexes[n][m].units = varg_binicileri_sayi;
-                                    hexes[n][m].texture = varg_binicileri_texture; // Dokuyu atama
+                                    hexes[n][m].texture = varg_binicileri_texture; 
 
                                     varg_binicileri_sayi -= varg_binicileri_sayi;
 
@@ -2954,22 +2861,18 @@ if (!background_texture) {
                             else if((troller_sayi > 0) && (troller_sayi > 100)) {
 
 
-                                    //hexes[i][j].x = start_x + j * 1.5 * HEX_SIZE;
-                                    //hexes[i][j].y = start_y + i * hex_height + (j % 2) * (HEX_SIZE * sqrt(3) / 2);
                                     hexes[n][m].health = troller_sonra / troller_once;
                                     hexes[n][m].units = 100;
-                                    hexes[n][m].texture = troller_texture; // Dokuyu atama
+                                    hexes[n][m].texture = troller_texture; 
 
                                     troller_sayi -= 100;
 
                             }
                             else if((troller_sayi > 0) && (troller_sayi <= 100)) {
 
-                                //hexes[i][j].x = start_x + j * 1.5 * HEX_SIZE;
-                                    //hexes[i][j].y = start_y + i * hex_height + (j % 2) * (HEX_SIZE * sqrt(3) / 2);
                                     hexes[n][m].health = troller_sonra / troller_once;
                                     hexes[n][m].units = troller_sayi;
-                                    hexes[n][m].texture = troller_texture; // Dokuyu atama
+                                    hexes[n][m].texture = troller_texture; 
 
                                     troller_sayi -= troller_sayi;
 
@@ -2981,7 +2884,6 @@ if (!background_texture) {
                     }
 
                     break;
-                // Diğer tuş olayları için buraya ekleme yapabilirsiniz
             }
         }
     }
@@ -2998,7 +2900,7 @@ if (!background_texture) {
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
                 drawHexagon(renderer, hexes[i][j].x, hexes[i][j].y, HEX_SIZE);
-                drawTexture(renderer, hexes[i][j].texture, hexes[i][j].x, hexes[i][j].y, HEX_SIZE); // Dokuyu çiz
+                drawTexture(renderer, hexes[i][j].texture, hexes[i][j].x, hexes[i][j].y, HEX_SIZE); 
 
                 drawHealthBar(renderer, hexes[i][j]);
 
@@ -3009,18 +2911,13 @@ if (!background_texture) {
                     sprintf(buffer, "%d", hexes[i][j].units);
                     drawText(renderer, font, hexes[i][j].x, hexes[i][j].y + 10, buffer);
                 }
-                //sprintf(buffer, "%d", hexes[i][j].units);
-                //drawText(renderer, font, hexes[i][j].x, hexes[i][j].y + 10, buffer);
-
-                //sprintf(buffer, "%d", hexes[i][j].health);
-                //drawText(renderer, font, hexes[i][j].x, hexes[i][j].y - 15, buffer);
             }
         }
 
         SDL_RenderPresent(renderer);
     }
 
-    // Belleği serbest bırak
+    // bellegi sil
     SDL_DestroyTexture(okcular_texture);
     SDL_DestroyTexture(piyadeler_texture);
     SDL_DestroyTexture(suvariler_texture);
